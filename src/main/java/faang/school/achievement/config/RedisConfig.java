@@ -1,7 +1,7 @@
 package faang.school.achievement.config;
 
 import faang.school.achievement.messaging.follow.FollowEventListener;
-import faang.school.achievement.messaging.Mentorship.MentorshipEventListener;
+import faang.school.achievement.messaging.mentorship.MentorshipEventListener;
 import faang.school.achievement.messaging.invitation.InvitationListener;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
