@@ -1,0 +1,1 @@
+INSERT INTO achievement(title, description, rarity, points, created_at, updated_at) VALUES ('Collector', 'Collect 100 goals', 2, 5, DEFAULT, DEFAULT);
