@@ -12,7 +12,7 @@ import java.util.Map;
 @Component
 @RequiredArgsConstructor
 public class AchievementCache {
-    private final Map<String, Achievement> achievementCache = new HashMap<>();
+    private static final Map<String, Achievement> achievementCache = new HashMap<>();
     private final AchievementRepository achievementRepository;
 
     @PostConstruct
