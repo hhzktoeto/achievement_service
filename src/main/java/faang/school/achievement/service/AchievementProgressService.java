@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -24,10 +23,6 @@ public class AchievementProgressService {
     @Transactional
     public void createProgressIfNecessary(long userId, long achievementId) {
         achievementProgressRepository.createProgressIfNecessary(userId, achievementId);
-    }
-
-    public List<AchievementProgress> findByUserId(long userId) {
-        return achievementProgressRepository.findByUserId(userId);
     }
 
     public boolean existsByUserIdAndAchievementId(long userId, long achievementId) {

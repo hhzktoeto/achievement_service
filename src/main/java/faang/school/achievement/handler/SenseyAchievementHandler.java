@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class SenseyAchievementHandler implements EventHandler {
-    private final String achievementTitle = "Achievement-Sensei";
+    private final String achievementTitle = "Achievement-Sensei"; //Название лучше в конфиге хранить?
     private final AchievementCache achievementCache;
     private final UserAchievementService userAchievementService;
     private final AchievementProgressService achievementProgressService;
