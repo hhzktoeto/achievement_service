@@ -22,8 +22,7 @@ public class AchievementCache {
                 .forEach(achievement -> ACHIEVEMENT_CACHE.put(achievement.getTitle(), achievement));
     }
 
-    public Achievement get(String title){
+    public Achievement get(String title) {
         return ACHIEVEMENT_CACHE.get(title);
     }
-
 }
