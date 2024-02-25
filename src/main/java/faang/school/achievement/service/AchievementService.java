@@ -7,7 +7,6 @@ import faang.school.achievement.repository.AchievementProgressRepository;
 import faang.school.achievement.repository.UserAchievementRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,7 +46,7 @@ public class AchievementService {
         return achievementProgressRepository.save(achievementProgress);
     }
 
-    @Async // Pool potokov create
+//    @Async // Pool potokov create
     public UserAchievement giveAchievement(long userId, Achievement achievement) {
         UserAchievement userAchievement = UserAchievement.builder()
                 .userId(userId)
