@@ -25,7 +25,7 @@ public class AchievementService {
         achievementProgressRepository.createProgressIfNecessary(userId, achievementId);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public AchievementProgress getProgress(long userId, long achievementId) {
         return achievementProgressRepository.findByUserIdAndAchievementId(userId, achievementId)
                 .orElseThrow(() -> new EntityNotFoundException("Achievement Progress not found for user {}" + userId));
