@@ -23,7 +23,6 @@ public class CollectorAchievementHandler extends GoalAchievementHandler {
         return achievementService;
     }
 
-    @Async("taskExecutor")
     @Override
     public void handle(Long userId) {
         super.handle(userId);
