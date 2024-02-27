@@ -8,7 +8,6 @@ import faang.school.achievement.service.AchievementService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -22,7 +21,6 @@ public class ManagerAchievementHandler implements EventHandler<TeamEventDto> {
     @Value("${achievement-service.achievement_manager}")
     private String achievementId;
 
-    @Async
     @Override
     public void handle(Long userId) {
         Achievement achievement = achievementCache.get(achievementId);

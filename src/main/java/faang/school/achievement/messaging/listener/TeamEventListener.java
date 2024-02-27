@@ -19,7 +19,6 @@ public class TeamEventListener implements MessageListener {
     private final ObjectMapper objectMapper;
     private final ManagerAchievementHandler managerAchievementHandler;
 
-
     @Override
     public void onMessage(Message message, byte[] pattern) {
         try {
