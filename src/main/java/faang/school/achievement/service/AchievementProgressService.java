@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class AchievementProgressService {
     private final AchievementProgressRepository achievementProgressRepository;
 
+    @Transactional(readOnly = true)
     public AchievementProgress findByUserIdAndAchievementId(long userId, long achievementId) {
         return achievementProgressRepository.findByUserIdAndAchievementId(userId, achievementId)
                 .orElseThrow(() -> new EntityNotFoundException("AchievementProgress not found"));
@@ -25,6 +26,7 @@ public class AchievementProgressService {
         achievementProgressRepository.createProgressIfNecessary(userId, achievementId);
     }
 
+    @Transactional(readOnly = true)
     public boolean existsByUserIdAndAchievementId(long userId, long achievementId) {
         return achievementProgressRepository.findByUserIdAndAchievementId(userId, achievementId).isPresent();
     }

@@ -23,8 +23,7 @@ public abstract class AbstractEventListener<T> implements MessageListener {
     @Override
     public void onMessage(Message message, byte[] pattern) {
         try {
-            objectMapper.findAndRegisterModules(); // без этой строчки ругается что нет зависимости jackson-datatype-jsr310
-            // хотя сама зависимость есть, другого варианта как пофиксить не нашел
+            objectMapper.findAndRegisterModules();
             T event = objectMapper.readValue(message.getBody(), eventType);
             processEvent(event);
         } catch (IOException e) {
