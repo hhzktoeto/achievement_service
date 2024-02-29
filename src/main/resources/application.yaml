@@ -8,7 +8,7 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
     show-sql: true
     properties:
       hibernate:
@@ -36,3 +36,8 @@ logging:
 project-service:
   host: localhost
   port: 8082
+
+async:
+  maxPoolSize: 20
+  corePoolSize: 10
+  queueCapacity: 15

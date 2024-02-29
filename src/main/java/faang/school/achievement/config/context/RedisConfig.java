@@ -22,10 +22,8 @@ public class RedisConfig {
     private String host;
     @Value("${spring.data.redis.port}")
     private int port;
-    //    @Value("${spring.data.redis.channels.follower_channel")
-    private String postAchievementChannel = "post_achievement_channel";
 
-    private final PostEventListener postEventListener;
+    private String postAchievementChannel = "post_achievement_channel";
 
     @Bean
     public JedisConnectionFactory jedisConnectionFactory() {

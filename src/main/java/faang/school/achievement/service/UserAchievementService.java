@@ -14,8 +14,7 @@ public class UserAchievementService {
         userAchievementRepository.save(achievement);
     }
 
-//    public void createAchievement(long userId, long userAchievementId) {
-//        userAchievementRepository.
-//
-//    }
+    public boolean userAchievementExists(long userId, long achievementId) {
+        return userAchievementRepository.existsByUserIdAndAchievementId(userId, achievementId);
+    }
 }
