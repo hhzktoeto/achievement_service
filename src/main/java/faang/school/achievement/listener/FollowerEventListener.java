@@ -1,5 +1,6 @@
 package faang.school.achievement.listener;
 
+import faang.school.achievement.dto.FollowerEvent;
 import faang.school.achievement.handler.follower.AbstractFollowerEventHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.connection.Message;
@@ -12,7 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FollowerEventListener implements MessageListener {
 
-    private final List<AbstractFollowerEventHandler> handlers;
+    private final List<AbstractFollowerEventHandler<FollowerEvent>> handlers;
 
     @Override
     public void onMessage(Message message, byte[] pattern) {

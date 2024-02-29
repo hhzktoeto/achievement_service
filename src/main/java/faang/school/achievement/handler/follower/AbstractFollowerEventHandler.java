@@ -13,13 +13,12 @@ import java.util.function.Consumer;
 
 @Component
 @Slf4j
-public abstract class AbstractFollowerEventHandler<T> implements EventHandler<FollowerEvent> {
+public abstract class AbstractFollowerEventHandler<T> implements EventHandler<T> {
 
     private ObjectMapper objectMapper;
 
-    protected void handleEvent(Message message, Class<T> type, Consumer<T> consumer) throws IOException {
+    public void handleEvent(Message message, Class<T> type, Consumer<T> consumer) throws IOException {
         try {
-            objectMapper.registerModule(new JavaTimeModule());
             T event = objectMapper.readValue(message.getBody(), type);
             log.error("Successful convert data to Json");
             consumer.accept(event);
