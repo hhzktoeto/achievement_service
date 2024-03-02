@@ -9,7 +9,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class CelebrityAchievementHandler extends AbstractEventHandler<FollowerEvent> {
 
-    private static final String achievementName = "Celebrity";
+    private static final String achievementName = "CELEBRITY";
+    private static final long REQUIRED_SUBSCRIPTIONS = 1_000_000;
 
     @Autowired
     public CelebrityAchievementHandler(AchievementService achievementService) {
@@ -19,5 +20,10 @@ public class CelebrityAchievementHandler extends AbstractEventHandler<FollowerEv
     @Override
     protected String getAchievementName() {
         return achievementName;
+    }
+
+    @Override
+    protected long getRequiredPoints() {
+        return REQUIRED_SUBSCRIPTIONS;
     }
 }
