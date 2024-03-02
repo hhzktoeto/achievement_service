@@ -1,6 +1,7 @@
 package faang.school.achievement.listener;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.connection.Message;
@@ -15,7 +16,7 @@ public class MapperJsonToData {
 
     private final ObjectMapper objectMapper;
 
-    public <T> T convertJsonToEvent(Message message, Class<T> classType) {
+    public <T> T convertJsonToEvent(@NonNull Message message, Class<T> classType) {
         try {
             return objectMapper.readValue(message.getBody(), classType);
         } catch (IOException e) {
