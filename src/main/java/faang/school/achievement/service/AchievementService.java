@@ -5,11 +5,11 @@ import faang.school.achievement.model.AchievementProgress;
 import faang.school.achievement.model.UserAchievement;
 import faang.school.achievement.repository.AchievementProgressRepository;
 import faang.school.achievement.repository.UserAchievementRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.reactivestreams.Publisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -27,8 +27,9 @@ public class AchievementService {
     }
 
     @Transactional
-    public Optional<AchievementProgress> getProgress(long userId, long achievementId) {
-        return achievementProgressRepository.findByUserIdAndAchievementId(userId, achievementId);
+    public AchievementProgress getProgress(long userId, long achievementId) {
+        return achievementProgressRepository.findByUserIdAndAchievementId(userId, achievementId)
+                .orElseThrow(() -> new EntityNotFoundException("Achievement Progress not found for user " + userId));
     }
 
     @Transactional
@@ -39,5 +40,4 @@ public class AchievementService {
                 .build();
         userAchievementRepository.save(userAchievement);
     }
-
 }
