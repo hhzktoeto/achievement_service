@@ -27,7 +27,7 @@ public class AchievementService {
     }
 
     @Transactional
-    public Optional<AchievementProgress>  getProgress(long userId, long achievementId) {
+    public Optional<AchievementProgress> getProgress(long userId, long achievementId) {
         return achievementProgressRepository.findByUserIdAndAchievementId(userId, achievementId);
     }
 

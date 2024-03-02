@@ -41,7 +41,6 @@ public abstract class AbstractEventHandler<T> implements EventHandler<T> {
     }
 
 
-
     private AchievementProgress addProgress(long userId, long achievementId) {
         Optional<AchievementProgress> progress = achievementService.getProgress(userId, achievementId);
         if (progress.isEmpty()) {

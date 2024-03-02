@@ -36,3 +36,6 @@ logging:
 project-service:
   host: localhost
   port: 8082
+
+achievement_service:
+  achievement_librarian: LIBRARIAN
