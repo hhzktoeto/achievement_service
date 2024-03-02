@@ -4,10 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import faang.school.achievement.dto.FollowerEvent;
 import faang.school.achievement.handler.EventHandler;
-import faang.school.achievement.model.Achievement;
-import faang.school.achievement.model.AchievementProgress;
-import faang.school.achievement.service.AchievementService;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.connection.Message;
 import org.springframework.stereotype.Component;
@@ -52,4 +48,3 @@ public abstract class AbstractFollowerEventHandler<T> implements EventHandler<Fo
         }
     }
 }
-
