@@ -2,7 +2,7 @@ package faang.school.achievement.listener;
 
 import faang.school.achievement.dto.FollowerEvent;
 import faang.school.achievement.handler.EventHandler;
-import faang.school.achievement.service.AchievementService;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.connection.Message;
@@ -17,14 +17,13 @@ public class FollowerEventListener extends AbstractEventListener<FollowerEvent> 
 
     @Autowired
     public FollowerEventListener(MapperJsonToData mapperJsonToData,
-                                 AchievementService achievementService,
                                  List<EventHandler<FollowerEvent>> handlers) {
-        super(mapperJsonToData, achievementService, handlers);
+        super(mapperJsonToData, handlers);
     }
 
     @Async
     @Override
-    public void onMessage(Message message, byte[] pattern) {
+    public void onMessage(@NonNull Message message, byte[] pattern) {
         FollowerEvent event = mapperJsonToData.convertJsonToEvent(message, FollowerEvent.class);
         handle(event.getFolloweeId());
     }

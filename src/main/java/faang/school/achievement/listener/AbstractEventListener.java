@@ -1,7 +1,6 @@
 package faang.school.achievement.listener;
 
 import faang.school.achievement.handler.EventHandler;
-import faang.school.achievement.service.AchievementService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.connection.MessageListener;
@@ -13,7 +12,6 @@ import java.util.List;
 public abstract class AbstractEventListener<T> implements MessageListener {
 
     protected final MapperJsonToData mapperJsonToData;
-    private final AchievementService achievementService;
     private final List<EventHandler<T>> handlers;
 
     public void handle(long userId) {

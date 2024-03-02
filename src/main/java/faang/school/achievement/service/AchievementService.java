@@ -39,6 +39,7 @@ public class AchievementService {
         achievementProgressRepository.save(progress);
     }
 
+
     public void giveAchievement(long userId, Achievement achievement) {
         UserAchievement userAchievement = UserAchievement.builder()
                 .userId(userId)
