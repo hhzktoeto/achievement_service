@@ -22,8 +22,8 @@ public class RedisConfig {
     private String host;
     @Value("${spring.data.redis.port}")
     private int port;
-
-    private String postAchievementChannel = "post_achievement_channel";
+    @Value("${spring.data.redis.channel.post")
+    private String postChannel;
 
     @Bean
     public JedisConnectionFactory jedisConnectionFactory() {
@@ -42,10 +42,20 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisMessageListenerContainer redisMessageListenerContainer(PostEventListener postEventListener) {
+    public MessageListenerAdapter postEventListener(PostEventListener postEventListener) {
+        return new MessageListenerAdapter(postEventListener);
+    }
+
+    @Bean
+    public RedisMessageListenerContainer redisMessageListenerContainer(MessageListenerAdapter postEventListener) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(jedisConnectionFactory());
-        container.addMessageListener(new MessageListenerAdapter(postEventListener), new ChannelTopic(postAchievementChannel));
+        container.addMessageListener(postEventListener, postEventTopic());
         return container;
+    }
+
+    @Bean
+    public ChannelTopic postEventTopic() {
+        return new ChannelTopic(postChannel);
     }
 }
