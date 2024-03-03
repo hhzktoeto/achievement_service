@@ -22,7 +22,7 @@ public class RedisConfig {
     private String host;
     @Value("${spring.data.redis.port}")
     private int port;
-    @Value("${spring.data.redis.channel.post")
+    @Value("${spring.data.redis.channel.post_channel")
     private String postChannel;
 
     @Bean
