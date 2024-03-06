@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.connection.MessageListener;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.util.List;
 
 @Component
@@ -21,5 +22,19 @@ public abstract class AbstractEventListener<T> implements MessageListener {
     @Autowired
     public void setEventHandlers(List<EventHandler<T>> eventHandlers) {
         this.eventHandlers = eventHandlers;
+    }
+
+    protected T getEvent(byte[] message, Class<T> eventTypeClass) {
+        try {
+            return objectMapper.readValue(message, eventTypeClass);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    protected void processEvent(Class<?> eventTypeClass, long userId) {
+        eventHandlers.stream()
+                .filter(eventHandler -> eventHandler.supportsEventType() == eventTypeClass)
+                .forEach(eventHandler -> eventHandler.handle(userId));
     }
 }
