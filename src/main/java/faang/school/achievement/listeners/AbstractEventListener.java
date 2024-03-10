@@ -32,9 +32,7 @@ public abstract class AbstractEventListener<T> implements MessageListener {
         }
     }
 
-    protected void processEvent(Class<?> eventTypeClass, long userId) {
-        eventHandlers.stream()
-                .filter(eventHandler -> eventHandler.supportsEventType() == eventTypeClass)
-                .forEach(eventHandler -> eventHandler.handle(userId));
+    protected void processEvent(long userId) {
+        eventHandlers.forEach(eventHandler -> eventHandler.handle(userId));
     }
 }

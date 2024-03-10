@@ -1,4 +1,4 @@
-package faang.school.achievement.handler.TaskCompleted;
+package faang.school.achievement.handler.taskCompleted;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

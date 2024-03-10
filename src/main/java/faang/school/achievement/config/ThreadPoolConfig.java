@@ -10,7 +10,7 @@ import java.util.concurrent.Executors;
 public class ThreadPoolConfig {
 
     @Bean
-    public ExecutorService myExecutorService() {
+    public ExecutorService executorService() {
         return Executors.newCachedThreadPool();
     }
 }

@@ -1,4 +1,4 @@
-package faang.school.achievement.handler.TaskCompleted;
+package faang.school.achievement.handler.taskCompleted;
 
 import faang.school.achievement.cache.AchievementCache;
 import faang.school.achievement.dto.TaskCompletedEvent;
@@ -24,11 +24,6 @@ public abstract class TaskCompletedHandler implements EventHandler<TaskCompleted
     @Autowired
     public void setAchievementService(AchievementService achievementService) {
         this.achievementService = achievementService;
-    }
-
-    @Override
-    public Class<?> supportsEventType() {
-        return TaskCompletedEvent.class;
     }
 
     protected void processAchievement(Long userId, String achievementName) {

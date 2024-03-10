@@ -10,6 +10,6 @@ public class TaskCompletedEventListener extends AbstractEventListener<TaskComple
     @Override
     public void onMessage(Message message, byte[] pattern) {
         TaskCompletedEvent taskCompletedEvent = getEvent(message.getBody(), TaskCompletedEvent.class);
-        processEvent(taskCompletedEvent.getClass(), taskCompletedEvent.getUserId());
+        processEvent(taskCompletedEvent.getUserId());
     }
 }
