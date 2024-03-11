@@ -1,6 +1,5 @@
 package faang.school.achievement.service;
 
-import faang.school.achievement.exception.EntityNotFoundException;
 import faang.school.achievement.model.Achievement;
 import faang.school.achievement.model.AchievementProgress;
 import faang.school.achievement.model.UserAchievement;
@@ -9,6 +8,7 @@ import faang.school.achievement.repository.UserAchievementRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.webjars.NotFoundException;
 
 @Service
 @RequiredArgsConstructor
@@ -24,7 +24,7 @@ public class AchievementService {
     @Transactional(readOnly = true)
     public AchievementProgress getProgress(long userId, long achievementId) {
         return achievementProgressRepository.findByUserIdAndAchievementId(userId, achievementId)
-                .orElseThrow(() -> new EntityNotFoundException("Прогресс достижения не найден"));
+                .orElseThrow(() -> new NotFoundException("Прогресс достижения не найден"));
     }
 
     @Transactional
