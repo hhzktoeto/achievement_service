@@ -28,11 +28,8 @@ public class AchievementService {
     }
 
     public Optional<AchievementProgress> getProgress(long userId, long achievementId) {
-        return achievementProgressRepository.findByUserIdAndAchievementId(userId, achievementId);
-    }
-
-    public void createProgressIfNecessary(long userId, long achievementId) {
         achievementProgressRepository.createProgressIfNecessary(userId, achievementId);
+        return achievementProgressRepository.findByUserIdAndAchievementId(userId, achievementId);
     }
 
     public void saveAchievementProgress(AchievementProgress progress) {
