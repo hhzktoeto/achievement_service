@@ -10,7 +10,7 @@ import java.util.concurrent.Executors;
 public class AsyncEventHandlerConfig {
 
     @Bean
-    public ExecutorService commentEventThreadPool(){
+    public ExecutorService executorService(){
         return Executors.newCachedThreadPool();
     }
 }

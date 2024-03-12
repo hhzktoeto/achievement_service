@@ -4,6 +4,6 @@ import org.springframework.scheduling.annotation.Async;
 
 public interface EventHandler<T> {
 
-    @Async("commentEventThreadPool")
+    @Async("executorService")
     void handle(Long userId);
 }
