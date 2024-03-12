@@ -4,6 +4,7 @@ import faang.school.achievement.dto.MentorshipStartEvent;
 import faang.school.achievement.handler.SenseyAchievementHandler;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -15,6 +16,7 @@ class MentorshipEventListenerTest {
 
     @Mock
     private SenseyAchievementHandler senseyAchievementHandler;
+    @InjectMocks
     private MentorshipEventListener mentorshipEventListener;
 
 

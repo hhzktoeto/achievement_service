@@ -1,7 +1,6 @@
 package faang.school.achievement.handler;
 
 import faang.school.achievement.cache.AchievementCache;
-import faang.school.achievement.dto.MentorshipStartEvent;
 import faang.school.achievement.model.Achievement;
 import faang.school.achievement.model.AchievementProgress;
 import faang.school.achievement.service.AchievementProgressService;
@@ -10,14 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 
 
-public abstract class MentorshipStartHandler implements EventHandler<MentorshipStartEvent> {
+public abstract class AbstractEventHandler implements EventHandler {
     private final String achievementTitle;
     private final AchievementCache achievementCache;
     private final UserAchievementService userAchievementService;
     private final AchievementProgressService achievementProgressService;
 
     @Autowired
-    protected MentorshipStartHandler(String achievementTitle, AchievementCache achievementCache, UserAchievementService userAchievementService, AchievementProgressService achievementProgressService) {
+    protected AbstractEventHandler(String achievementTitle, AchievementCache achievementCache, UserAchievementService userAchievementService, AchievementProgressService achievementProgressService) {
         this.achievementTitle = achievementTitle;
         this.achievementCache = achievementCache;
         this.userAchievementService = userAchievementService;

@@ -6,7 +6,7 @@ import faang.school.achievement.service.UserAchievementService;
 import org.springframework.stereotype.Component;
 
 @Component
-public class SenseyAchievementHandler extends MentorshipStartHandler {
+public class SenseyAchievementHandler extends AbstractEventHandler {
 
     protected SenseyAchievementHandler(AchievementCache achievementCache,
                                        UserAchievementService userAchievementService,

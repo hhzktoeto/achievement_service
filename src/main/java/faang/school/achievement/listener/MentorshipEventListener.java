@@ -8,11 +8,10 @@ import java.util.List;
 
 @Component
 public class MentorshipEventListener extends AbstractEventListener<MentorshipStartEvent> {
-    private final List<EventHandler<MentorshipStartEvent>> eventHandlers;
+
 
     public MentorshipEventListener(List<EventHandler<MentorshipStartEvent>> eventHandlers) {
-        super(MentorshipStartEvent.class);
-        this.eventHandlers = eventHandlers;
+        super(MentorshipStartEvent.class, eventHandlers);
     }
 
     @Override
