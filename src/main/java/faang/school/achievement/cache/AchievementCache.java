@@ -5,6 +5,7 @@ import faang.school.achievement.repository.AchievementRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,6 +17,7 @@ public class AchievementCache {
     private final AchievementRepository achievementRepository;
 
     @PostConstruct
+    @Transactional(readOnly = true)
     public void init() {
         achievementRepository.findAll()
                 .forEach(achievement -> ACHIEVEMENT_CACHE.put(achievement.getTitle(), achievement));
