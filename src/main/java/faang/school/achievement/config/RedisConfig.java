@@ -1,6 +1,7 @@
 package faang.school.achievement.config;
 
 import faang.school.achievement.listener.CommentEventListener;
+import faang.school.achievement.listeners.TaskCompletedEventListener;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -17,28 +18,45 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @RequiredArgsConstructor
 public class RedisConfig {
 
-    @Value("${spring.data.redis.host}")
-    private String redisHost;
     @Value("${spring.data.redis.port}")
     private int redisPort;
+
+    @Value("${spring.data.redis.host}")
+    private String redisHost;
+
+    @Value("${spring.data.redis.channel.task_channel.name}")
+    private String taskCompletedEventChannel;
+
     @Value("${spring.data.redis.channel.comment_channel}")
     private String commentChannelName;
 
+    private final TaskCompletedEventListener taskCompletedEventListener;
     private final CommentEventListener commentEventListener;
 
+
     @Bean
-    public JedisConnectionFactory jedisConnectionFactory() {
-        RedisStandaloneConfiguration config = new RedisStandaloneConfiguration(redisHost, redisPort);
+    public JedisConnectionFactory jedisConnectionFactory(){
+        RedisStandaloneConfiguration config = new RedisStandaloneConfiguration(redisHost,redisPort);
         return new JedisConnectionFactory(config);
     }
 
     @Bean
-    public RedisTemplate<String, Object> redisTemplate() {
-        RedisTemplate<String, Object> template = new RedisTemplate<>();
-        template.setConnectionFactory(jedisConnectionFactory());
-        template.setKeySerializer(new StringRedisSerializer());
-        template.setValueSerializer(new StringRedisSerializer());
-        return template;
+    public RedisTemplate<String,Object> redisTemplate(){
+        RedisTemplate<String,Object> redisTemplate = new RedisTemplate<>();
+        redisTemplate.setConnectionFactory(jedisConnectionFactory());
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.setValueSerializer(new StringRedisSerializer());
+        return redisTemplate;
+    }
+
+    @Bean
+    MessageListenerAdapter taskCompletedMessageListener(){
+        return new MessageListenerAdapter(taskCompletedEventListener);
+    }
+
+    @Bean
+    ChannelTopic taskCompletedTopic(){
+        return new ChannelTopic(taskCompletedEventChannel);
     }
 
     @Bean
@@ -52,10 +70,10 @@ public class RedisConfig {
     }
 
     @Bean
-    RedisMessageListenerContainer redisContainer() {
-        RedisMessageListenerContainer container
-                = new RedisMessageListenerContainer();
+    RedisMessageListenerContainer redisContainer(){
+        RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(jedisConnectionFactory());
+        container.addMessageListener(taskCompletedMessageListener(),taskCompletedTopic());
         container.addMessageListener(commentListener(), commentChannel());
         return container;
     }

@@ -6,23 +6,31 @@ import faang.school.achievement.model.AchievementProgress;
 import faang.school.achievement.model.UserAchievement;
 import faang.school.achievement.repository.AchievementProgressRepository;
 import faang.school.achievement.repository.UserAchievementRepository;
+import jakarta.persistence.OptimisticLockException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AchievementService {
     private final UserAchievementRepository userAchievementRepository;
     private final AchievementProgressRepository achievementProgressRepository;
 
-    public boolean hasAchievement(Achievement achievement, Long userId) {
-        return userAchievementRepository.existsByUserIdAndAchievementId(userId, achievement.getId());
+    public boolean hasAchievement(long userId, long achievementId) {
+        return userAchievementRepository.existsByUserIdAndAchievementId(userId, achievementId);
     }
 
     @Transactional
     public void createProgressIfNecessary(long userId, long achievementId) {
         achievementProgressRepository.createProgressIfNecessary(userId, achievementId);
+        log.info("AchievementProgress is created ");
     }
 
     @Transactional(readOnly = true)
@@ -32,15 +40,20 @@ public class AchievementService {
     }
 
     @Transactional
+    @Retryable(retryFor = OptimisticLockException.class, maxAttempts = 5, backoff = @Backoff(delay=100))
+    public void updateProgress(long userId, long achievementId) {
+        AchievementProgress achievementProgress = getProgress(userId, achievementId);
+        achievementProgress.increment();
+        achievementProgressRepository.save(achievementProgress);
+        log.info("AchievementProgress is updated ");
+    }
+
+    @Transactional
     public void giveAchievement(Achievement achievement, long userId) {
         UserAchievement userAchievement = new UserAchievement();
         userAchievement.setAchievement(achievement);
         userAchievement.setUserId(userId);
         userAchievementRepository.save(userAchievement);
-    }
-
-    @Transactional
-    public void updateAchievementProgress(AchievementProgress achievementProgress) {
-        achievementProgressRepository.save(achievementProgress);
+        log.info("Achievement {} is given to user {}", achievement.getTitle(), userId);
     }
 }
