@@ -22,7 +22,7 @@ public class RedisConfig {
     @Value("${spring.data.redis.port}")
     private int redisPort;
 
-    @Value("${spring.data.redis.channel.goal}")
+    @Value("${spring.data.redis.channel.goal_created}")
     private String goalChannelName;
 
     private final GoalEventListener goalEventListener;
