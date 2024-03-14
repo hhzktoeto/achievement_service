@@ -46,7 +46,7 @@ class ExpertAchievementHandlerTest {
         //Arrange
         progress.setCurrentPoints(10);
         achievement.setPoints(1000);
-        when(achievementService.hasAchievement(achievement,userId)).thenReturn(false);
+        when(achievementService.hasAchievement(achievementId, userId)).thenReturn(false);
         when(achievementService.getProgress(userId, achievementId)).thenReturn(progress);
 
         //Act
@@ -56,7 +56,7 @@ class ExpertAchievementHandlerTest {
         assertAll(() -> verify(achievementCache, times(1)).get(achievementName),
                 () -> verify(achievementService, times(1)).createProgressIfNecessary(userId, achievementId),
                 () -> verify(achievementService, times(1)).getProgress(userId, achievementId),
-                () -> verify(achievementService, times(1)).updateAchievementProgress(progress),
+                () -> verify(achievementService, times(1)).updateProgress(progress),
                 () -> verify(achievementService, times(0)).giveAchievement(achievement, userId)
         );
     }
@@ -66,7 +66,7 @@ class ExpertAchievementHandlerTest {
         //Arrange
         progress.setCurrentPoints(999);
         achievement.setPoints(1000);
-        when(achievementService.hasAchievement(achievement,userId)).thenReturn(false);
+        when(achievementService.hasAchievement(achievementId, userId)).thenReturn(false);
         when(achievementService.getProgress(userId, achievementId)).thenReturn(progress);
 
         //Act
@@ -76,7 +76,7 @@ class ExpertAchievementHandlerTest {
         assertAll(() -> verify(achievementCache, times(1)).get(achievementName),
                 () -> verify(achievementService, times(1)).createProgressIfNecessary(userId, achievementId),
                 () -> verify(achievementService, times(1)).getProgress(userId, achievementId),
-                () -> verify(achievementService, times(1)).updateAchievementProgress(progress),
+                () -> verify(achievementService, times(1)).updateProgress(progress),
                 () -> verify(achievementService, times(1)).giveAchievement(achievement, userId)
         );
     }
@@ -84,7 +84,7 @@ class ExpertAchievementHandlerTest {
     @Test
     void testHandle_whenUserHaveAchievement_thenDoNothing() {
         //Arrange
-        when(achievementService.hasAchievement(achievement,userId)).thenReturn(true);
+        when(achievementService.hasAchievement(achievementId, userId)).thenReturn(true);
 
         //Act
         expertAchievementHandler.executeHandle(userId, achievementName);
@@ -93,7 +93,7 @@ class ExpertAchievementHandlerTest {
         assertAll(() -> verify(achievementCache, times(1)).get(achievementName),
                 () -> verify(achievementService, times(0)).createProgressIfNecessary(userId, achievementId),
                 () -> verify(achievementService, times(0)).getProgress(userId, achievementId),
-                () -> verify(achievementService, times(0)).updateAchievementProgress(progress),
+                () -> verify(achievementService, times(0)).updateProgress(progress),
                 () -> verify(achievementService, times(0)).giveAchievement(achievement, userId)
         );
     }

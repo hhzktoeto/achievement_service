@@ -41,9 +41,7 @@ public class AchievementService {
 
     @Transactional
     @Retryable(retryFor = OptimisticLockException.class, maxAttempts = 5, backoff = @Backoff(delay=100))
-    public void updateProgress(long userId, long achievementId) {
-        AchievementProgress achievementProgress = getProgress(userId, achievementId);
-        achievementProgress.increment();
+    public void updateProgress(AchievementProgress achievementProgress) {
         achievementProgressRepository.save(achievementProgress);
         log.info("AchievementProgress is updated ");
     }

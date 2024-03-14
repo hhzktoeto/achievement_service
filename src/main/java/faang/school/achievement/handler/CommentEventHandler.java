@@ -18,14 +18,14 @@ public abstract class CommentEventHandler implements EventHandler<CommentEventDt
 
     protected void executeHandle(Long userId, String achievementName) {
         Achievement achievement = achievementCache.get(achievementName);
-        if (achievementService.hasAchievement(achievement, userId)) {
+        if (achievementService.hasAchievement(achievement.getId(), userId)) {
             return;
         }
         long achievementId = achievement.getId();
         achievementService.createProgressIfNecessary(userId, achievementId);
         AchievementProgress progress = achievementService.getProgress(userId, achievementId);
         progress.increment();
-        achievementService.updateAchievementProgress(progress);
+        achievementService.updateProgress(progress);
         log.info("Updated points of achievement {} to user {}", achievementName, userId);
 
         if (progress.getCurrentPoints() >= achievement.getPoints()) {

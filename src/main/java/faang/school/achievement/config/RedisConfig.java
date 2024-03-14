@@ -1,7 +1,7 @@
 package faang.school.achievement.config;
 
 import faang.school.achievement.listener.CommentEventListener;
-import faang.school.achievement.listeners.TaskCompletedEventListener;
+import faang.school.achievement.listener.TaskCompletedEventListener;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -24,10 +24,10 @@ public class RedisConfig {
     @Value("${spring.data.redis.host}")
     private String redisHost;
 
-    @Value("${spring.data.redis.channel.task_channel.name}")
+    @Value("${spring.data.redis.channel.task}")
     private String taskCompletedEventChannel;
 
-    @Value("${spring.data.redis.channel.comment_channel}")
+    @Value("${spring.data.redis.channel.comment}")
     private String commentChannelName;
 
     private final TaskCompletedEventListener taskCompletedEventListener;
