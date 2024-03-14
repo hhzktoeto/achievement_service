@@ -23,16 +23,16 @@ public abstract class GoalAchievementHandler implements EventHandler<GoalSetEven
         Achievement achievement = achievementCache.get(getAchievementName());
         long achievementId = achievement.getId();
 
-        if (achievementService.userHasAchievement(userId, achievementId)) {
+        if (achievementService.hasAchievement(userId, achievementId)) {
             return;
         }
 
         achievementService.createProgressIfNecessary(userId, achievementId);
         AchievementProgress progress = achievementService.getProgress(userId, achievementId);
-        achievementService.incrementProgress(progress);
+        progress.increment();
 
         if (progress.getCurrentPoints() >= achievement.getPoints()) {
-            achievementService.giveAchievement(userId, achievement);
+            achievementService.giveAchievement(achievement, userId);
         }
     }
 

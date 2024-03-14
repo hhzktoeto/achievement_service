@@ -1,5 +1,6 @@
 package faang.school.achievement.service;
 
+import faang.school.achievement.exception.EntityNotFoundException;
 import faang.school.achievement.model.Achievement;
 import faang.school.achievement.model.AchievementProgress;
 import faang.school.achievement.model.UserAchievement;
@@ -83,7 +84,7 @@ class AchievementServiceTest {
     void testUserHasAchievement_UserHasAchievement_ReturnsTrue() {
         when(userAchievementRepository.existsByUserIdAndAchievementId(userId, achievementId)).thenReturn(true);
 
-        boolean result = achievementService.userHasAchievement(userId, achievementId);
+        boolean result = achievementService.hasAchievement(userId, achievementId);
 
         assertTrue(result);
     }
@@ -92,7 +93,7 @@ class AchievementServiceTest {
     void testUserHasAchievement_UserDoesNotHaveAchievement_ReturnsFalse() {
         when(userAchievementRepository.existsByUserIdAndAchievementId(userId, achievementId)).thenReturn(false);
 
-        boolean result = achievementService.userHasAchievement(userId, achievementId);
+        boolean result = achievementService.hasAchievement(userId, achievementId);
 
         assertFalse(result);
     }
@@ -122,21 +123,13 @@ class AchievementServiceTest {
     }
 
     @Test
-    void testIncrementProgress_IncrementsProgress() {
-        AchievementProgress progress = new AchievementProgress();
-        achievementService.incrementProgress(progress);
-
-        assertEquals(1, progress.getCurrentPoints());
-    }
-
-    @Test
     void testGiveAchievement_SavesUserAchievement() {
         Achievement achievement = new Achievement();
         UserAchievement userAchievement = UserAchievement.builder()
                 .achievement(achievement)
                 .userId(userId)
                 .build();
-        achievementService.giveAchievement(userId, achievement);
+        achievementService.giveAchievement(achievement, userId);
 
         verify(userAchievementRepository, times(1)).save(userAchievement);
     }
