@@ -1,5 +1,6 @@
 package faang.school.achievement.service;
 
+import faang.school.achievement.exception.EntityNotFoundException;
 import faang.school.achievement.model.Achievement;
 import faang.school.achievement.model.AchievementProgress;
 import faang.school.achievement.model.UserAchievement;
@@ -35,26 +36,21 @@ public class AchievementService {
     @Transactional(readOnly = true)
     public AchievementProgress getProgress(long userId, long achievementId) {
         return achievementProgressRepository.findByUserIdAndAchievementId(userId, achievementId)
-                .orElseThrow(() -> new RuntimeException("Progress has not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Achievement Progress not found for user {}" + userId));
     }
 
     @Transactional
     @Retryable(retryFor = OptimisticLockException.class, maxAttempts = 5, backoff = @Backoff(delay=100))
-    public void updateProgress(long userId, long achievementId) {
-        AchievementProgress achievementProgress = getProgress(userId, achievementId);
-        achievementProgress.increment();
+    public void updateProgress(AchievementProgress achievementProgress) {
         achievementProgressRepository.save(achievementProgress);
         log.info("AchievementProgress is updated ");
     }
 
     @Transactional
     public void giveAchievement(Achievement achievement, long userId) {
-        UserAchievement userAchievement = UserAchievement.builder()
-                .achievement(achievement)
-                .userId(userId)
-                .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
-                .build();
+        UserAchievement userAchievement = new UserAchievement();
+        userAchievement.setAchievement(achievement);
+        userAchievement.setUserId(userId);
         userAchievementRepository.save(userAchievement);
         log.info("Achievement {} is given to user {}", achievement.getTitle(), userId);
     }

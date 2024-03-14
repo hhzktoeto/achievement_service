@@ -28,10 +28,12 @@ public abstract class TaskCompletedHandler implements EventHandler<TaskCompleted
 
     protected void processAchievement(Long userId, String achievementName) {
         Achievement achievement = achievementCache.get(achievementName);
-        AchievementProgress achievementProgress = achievementService.getProgress(userId, achievement.getId());
         if (!achievementService.hasAchievement(userId, achievement.getId())) {
             achievementService.createProgressIfNecessary(userId, achievement.getId());
-            achievementService.updateProgress(userId, achievement.getId());
+            AchievementProgress achievementProgress = achievementService.getProgress(userId, achievement.getId());
+            achievementProgress.increment();
+            achievementService.updateProgress(achievementProgress);
+
             if (achievementProgress.getCurrentPoints() >= achievement.getPoints()) {
                 achievementService.giveAchievement(achievement, userId);
             }

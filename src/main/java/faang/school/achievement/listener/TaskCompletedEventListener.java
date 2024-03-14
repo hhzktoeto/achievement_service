@@ -1,4 +1,4 @@
-package faang.school.achievement.listeners;
+package faang.school.achievement.listener;
 
 import faang.school.achievement.dto.TaskCompletedEvent;
 import org.springframework.data.redis.connection.Message;
@@ -9,7 +9,7 @@ public class TaskCompletedEventListener extends AbstractEventListener<TaskComple
 
     @Override
     public void onMessage(Message message, byte[] pattern) {
-        TaskCompletedEvent taskCompletedEvent = getEvent(message.getBody(), TaskCompletedEvent.class);
+        TaskCompletedEvent taskCompletedEvent = getEvent(message, TaskCompletedEvent.class);
         processEvent(taskCompletedEvent.getUserId());
     }
 }

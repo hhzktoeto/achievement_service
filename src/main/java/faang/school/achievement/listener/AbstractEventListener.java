@@ -1,8 +1,9 @@
-package faang.school.achievement.listeners;
+package faang.school.achievement.listener;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import faang.school.achievement.handler.EventHandler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;
 import org.springframework.stereotype.Component;
 
@@ -24,9 +25,9 @@ public abstract class AbstractEventListener<T> implements MessageListener {
         this.eventHandlers = eventHandlers;
     }
 
-    protected T getEvent(byte[] message, Class<T> eventTypeClass) {
+    protected T getEvent(Message message, Class<T> eventTypeClass) {
         try {
-            return objectMapper.readValue(message, eventTypeClass);
+            return objectMapper.readValue(message.getBody(), eventTypeClass);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
