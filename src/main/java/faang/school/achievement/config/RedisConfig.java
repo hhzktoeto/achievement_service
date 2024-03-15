@@ -2,6 +2,7 @@ package faang.school.achievement.config;
 
 import faang.school.achievement.listener.CommentEventListener;
 import faang.school.achievement.listener.TaskCompletedEventListener;
+import faang.school.achievement.listener.GoalEventListener;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -30,6 +31,10 @@ public class RedisConfig {
     @Value("${spring.data.redis.channel.comment}")
     private String commentChannelName;
 
+    @Value("${spring.data.redis.channel.goal_created}")
+    private String goalChannelName;
+
+    private final GoalEventListener goalEventListener;
     private final TaskCompletedEventListener taskCompletedEventListener;
     private final CommentEventListener commentEventListener;
 
@@ -70,11 +75,22 @@ public class RedisConfig {
     }
 
     @Bean
+    ChannelTopic goalChannel() {
+        return new ChannelTopic(goalChannelName);
+    }
+
+    @Bean
+    MessageListenerAdapter goalListener() {
+        return new MessageListenerAdapter(goalEventListener);
+    }
+
+    @Bean
     RedisMessageListenerContainer redisContainer(){
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(jedisConnectionFactory());
         container.addMessageListener(taskCompletedMessageListener(),taskCompletedTopic());
         container.addMessageListener(commentListener(), commentChannel());
+        container.addMessageListener(goalListener(), goalChannel());
         return container;
     }
 }
