@@ -24,7 +24,13 @@ spring:
       channel:
         achievement: achievement_channel
         follower: follower_channel
-        goal: goal_channel
+        task: task_channel
+        comment: comment_channel
+        goal_created: goal_created_channel
+
+  achievements:
+    comment:
+      expert: EXPERT
 
 server:
   port: 8085

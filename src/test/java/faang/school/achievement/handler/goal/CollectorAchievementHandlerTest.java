@@ -35,14 +35,13 @@ class CollectorAchievementHandlerTest {
         progress.setCurrentPoints(10);
         ReflectionTestUtils.setField(achievement, "points", 10);
         when(achievementCache.get("Collector")).thenReturn(achievement);
-        when(achievementService.userHasAchievement(userId, achievement.getId())).thenReturn(false);
+        when(achievementService.hasAchievement(userId, achievement.getId())).thenReturn(false);
         when(achievementService.getProgress(userId, achievement.getId())).thenReturn(progress);
 
         collectorAchievementHandler.handle(userId);
 
         verify(achievementService, times(1)).createProgressIfNecessary(userId, achievement.getId());
-        verify(achievementService, times(1)).incrementProgress(progress);
-        verify(achievementService, times(1)).giveAchievement(userId, achievement);
+        verify(achievementService, times(1)).giveAchievement(achievement, userId);
     }
 
     @Test
@@ -54,13 +53,12 @@ class CollectorAchievementHandlerTest {
         progress.setCurrentPoints(5);
         ReflectionTestUtils.setField(achievement, "points", 10);
         when(achievementCache.get("Collector")).thenReturn(achievement);
-        when(achievementService.userHasAchievement(userId, achievement.getId())).thenReturn(false);
+        when(achievementService.hasAchievement(userId, achievement.getId())).thenReturn(false);
         when(achievementService.getProgress(userId, achievement.getId())).thenReturn(progress);
 
         collectorAchievementHandler.handle(userId);
 
         verify(achievementService, times(1)).createProgressIfNecessary(userId, achievement.getId());
-        verify(achievementService, times(1)).incrementProgress(progress);
-        verify(achievementService, never()).giveAchievement(userId, achievement);
+        verify(achievementService, never()).giveAchievement(achievement, userId);
     }
 }
