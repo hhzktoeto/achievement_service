@@ -113,7 +113,7 @@ class AchievementServiceTest {
     void testGetProgress_ProgressDoesNotExist_ThrowsEntityNotFoundException() {
         when(achievementProgressRepository.findByUserIdAndAchievementId(userId, achievementId)).thenReturn(Optional.empty());
 
-        assertThrows(NotFoundException.class, () -> achievementService.getProgress(userId, achievementId));
+        assertThrows(EntityNotFoundException.class, () -> achievementService.getProgress(userId, achievementId));
     }
 
     @Test
