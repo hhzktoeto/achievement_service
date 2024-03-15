@@ -11,6 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.webjars.NotFoundException;
 
 import java.util.Optional;
 
@@ -69,7 +70,7 @@ class AchievementServiceTest {
     void testGetProgress_ProgressDoesNotExist_ThrowsEntityNotFoundException() {
         when(achievementProgressRepository.findByUserIdAndAchievementId(userId, achievementId)).thenReturn(Optional.empty());
 
-        assertThrows(EntityNotFoundException.class, () -> achievementService.getProgress(userId, achievementId));
+        assertThrows(NotFoundException.class, () -> achievementService.getProgress(userId, achievementId));
     }
 
     @Test
