@@ -9,8 +9,6 @@ import faang.school.achievement.repository.UserAchievementRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 public class AchievementService {
@@ -27,9 +25,9 @@ public class AchievementService {
         return achievementCache.getAchievement(title);
     }
 
-    public Optional<AchievementProgress> getProgress(long userId, long achievementId) {
+    public AchievementProgress getProgress(long userId, long achievementId) {
         achievementProgressRepository.createProgressIfNecessary(userId, achievementId);
-        return achievementProgressRepository.findByUserIdAndAchievementId(userId, achievementId);
+        return achievementProgressRepository.findByUserIdAndAchievementId(userId, achievementId).get();
     }
 
     public void saveAchievementProgress(AchievementProgress progress) {

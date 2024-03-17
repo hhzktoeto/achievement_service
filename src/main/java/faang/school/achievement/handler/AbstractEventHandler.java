@@ -6,8 +6,6 @@ import faang.school.achievement.service.AchievementService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Optional;
-
 @Slf4j
 @RequiredArgsConstructor
 public abstract class AbstractEventHandler<T> implements EventHandler<T> {
@@ -20,16 +18,11 @@ public abstract class AbstractEventHandler<T> implements EventHandler<T> {
         long achievementId = achievement.getId();
 
         if (!achievementService.hasAchievement(userId, achievementId)) {
-            Optional<AchievementProgress> achievementProgress = achievementService.getProgress(userId, achievementId);
-            if (achievementProgress.isEmpty()) {
-                achievementProgress = achievementService.getProgress(userId, achievementId);
-            }
+            AchievementProgress achievementProgress = achievementService.getProgress(userId, achievementId);
 
-            AchievementProgress progress = achievementProgress.get();
-
-            if (progress.getCurrentPoints() < getRequiredPoints()) {
-                progress.increment();
-                achievementService.saveAchievementProgress(progress);
+            if (achievementProgress.getCurrentPoints() < getRequiredPoints()) {
+                achievementProgress.increment();
+                achievementService.saveAchievementProgress(achievementProgress);
             } else {
                 achievementService.giveAchievement(userId, achievement);
             }
