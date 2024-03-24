@@ -5,12 +5,13 @@ import faang.school.achievement.handler.EventHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.List;
 
+@Component
 public abstract class AbstractEventListener<T> implements MessageListener {
-    @Autowired
     private ObjectMapper objectMapper;
     private final Class<T> eventType;
 
@@ -21,6 +22,7 @@ public abstract class AbstractEventListener<T> implements MessageListener {
         this.eventHandlers = eventHandlers;
     }
 
+    @Autowired
     private void setObjectMapper(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
     }
@@ -28,7 +30,6 @@ public abstract class AbstractEventListener<T> implements MessageListener {
     @Override
     public void onMessage(Message message, byte[] pattern) {
         try {
-            objectMapper.findAndRegisterModules();
             T event = objectMapper.readValue(message.getBody(), eventType);
             processEvent(event);
         } catch (IOException e) {

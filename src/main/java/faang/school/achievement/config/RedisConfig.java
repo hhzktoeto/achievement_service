@@ -20,7 +20,7 @@ public class RedisConfig {
     @Value("${spring.data.redis.port}")
     private int port;
 
-    @Value("${spring.data.redis.channel.mentorship_channel}")
+    @Value("${spring.data.redis.channel.mentorship_requested_channel}")
     private String mentorshipChannel;
 
     private final MentorshipEventListener mentorshipEventListener;

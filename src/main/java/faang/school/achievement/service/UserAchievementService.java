@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -23,8 +22,6 @@ public class UserAchievementService {
         UserAchievement achievement = UserAchievement.builder() //не уверен что это правильный подход
                 .userId(userId)
                 .achievement(achievementService.findById(achievementId))
-                .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
                 .build();
         return userAchievementRepository.save(achievement);
     }
