@@ -6,15 +6,17 @@ import faang.school.achievement.service.AchievementService;
 import org.springframework.stereotype.Component;
 
 @Component
-public class OpinionLeaderAchievementHandler extends AbstractEventHandler implements EventHandler<PostEvent>{
-    String achievementTitle = "WRITER";
+public class OpinionLeaderAchievementHandler extends AbstractAchievementHandler implements EventHandler<PostEvent> {
+    private final String achievementTitle = "WRITER";
+    private final int requiredEvents = 100;
 
     public OpinionLeaderAchievementHandler(AchievementCache achievementCache, AchievementService achievementService) {
         super(achievementCache, achievementService);
     }
 
     @Override
-    public void handle(Long userId) {
-        abstractHandle(userId, achievementTitle);
+    public void handle(PostEvent event) {
+        handle(achievementTitle, event.getAuthorId(), requiredEvents);
     }
+
 }

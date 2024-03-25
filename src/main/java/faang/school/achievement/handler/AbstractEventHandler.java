@@ -13,7 +13,7 @@ public abstract class AbstractEventHandler {
     private final AchievementService achievementService;
 
     public void abstractHandle(Long userId, String achievementTitle) {
-        Achievement achievement = achievementCache.getAchievement(achievementTitle);
+        Achievement achievement = achievementCache.get(achievementTitle);
         if (!achievementService.hasAchievement(userId, achievement.getId())) {
             achievementService.createProgressIfNecessary(userId, achievement.getId());
 

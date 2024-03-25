@@ -13,11 +13,12 @@ import java.util.List;
 public class PostEventListener extends AbstractEventListener<PostEvent> implements MessageListener {
 
     public PostEventListener(ObjectMapper objectMapper, List<EventHandler<PostEvent>> eventHandlers) {
-        super(objectMapper, eventHandlers);
+        super(eventHandlers, objectMapper);
     }
 
     @Override
     public void onMessage(Message message, byte[] pattern) {
-        handleEvent(message, PostEvent.class, postEvent -> runHandlers(postEvent.getAuthorId()));
+        handle(message, PostEvent.class);
     }
+
 }
