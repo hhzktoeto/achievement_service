@@ -11,7 +11,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public abstract class AbstractEventListener<T> {
 
-    protected final List<EventHandler<T>> eventHandlers;
+    private final List<EventHandler<T>> eventHandlers;
+    private final ObjectMapper mapper;
 
     protected void handle(Message message, Class<T> type) {
         T event = mapToEvent(message, type);
@@ -19,7 +20,6 @@ public abstract class AbstractEventListener<T> {
     }
 
     private T mapToEvent(Message message, Class<T> type) {
-        ObjectMapper mapper = new ObjectMapper();
         try {
             return mapper.readValue(message.getBody(), type);
         } catch (IOException e) {

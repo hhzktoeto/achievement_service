@@ -19,14 +19,14 @@ public abstract class AbstractAchievementHandler {
     protected void handle(String achievementTitle, long userId, int requiredEvents) {
         Achievement achievement = achievementCache.get(achievementTitle);
         long achievementId = achievement.getId();
-        if (achievementService.hasAchievement(userId, achievementId)) {
-            return;
-        }
-        achievementService.createProgressIfNecessary(userId, achievementId);
-        AchievementProgress progress = achievementService.getProgress(userId, achievementId);
-        achievementService.incrementPoints(progress);
-        if (progress.getCurrentPoints() >= requiredEvents) {
-            achievementService.giveAchievement(userId, achievement);
+
+        if (!achievementService.hasAchievement(userId, achievementId)) {
+            achievementService.createProgressIfNecessary(userId, achievementId);
+            AchievementProgress progress = achievementService.getProgress(userId, achievementId);
+            achievementService.incrementPoints(progress);
+            if (progress.getCurrentPoints() >= requiredEvents) {
+                achievementService.giveAchievement(userId, achievement);
+            }
         }
     }
 

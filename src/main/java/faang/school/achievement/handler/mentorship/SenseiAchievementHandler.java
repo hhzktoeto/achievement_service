@@ -24,5 +24,4 @@ public class SenseiAchievementHandler extends AbstractAchievementHandler impleme
         super.handle(achievementTitle, event.getMentorId(), requiredEvents);
     }
 
-
 }
