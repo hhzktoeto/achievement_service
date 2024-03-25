@@ -65,7 +65,7 @@ public class AchievementServiceTest {
         Achievement achievement = new Achievement();
         UserAchievement userAchievement = new UserAchievement();
         userAchievement.setAchievement(achievement);
-        userAchievement.setId(1L);
+        userAchievement.setUserId(1L);
         achievementService.giveAchievement(1L, achievement);
         verify(userAchievementRepository, times(1)).save(userAchievement);
     }
