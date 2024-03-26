@@ -8,26 +8,26 @@ import org.springframework.data.redis.connection.Message;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.function.Consumer;
 
 @RequiredArgsConstructor
 @Slf4j
 public abstract class AbstractEventListener<T> {
-    private final ObjectMapper objectMapper;
-    private final List<EventHandler<T>> eventHandlers;
 
-    protected void handleEvent(Message message, Class<T> type, Consumer<T> consumer) {
+    private final List<EventHandler<T>> eventHandlers;
+    private final ObjectMapper mapper;
+
+    protected void handle(Message message, Class<T> type) {
+        T event = mapToEvent(message, type);
+        eventHandlers.forEach(eventHandler -> eventHandler.handle(event));
+    }
+
+    private T mapToEvent(Message message, Class<T> type) {
         try {
-            T event = objectMapper.readValue(message.getBody(), type);
-            consumer.accept(event);
-            log.info("Success deserializing JSON to object");
+            return mapper.readValue(message.getBody(), type);
         } catch (IOException e) {
             log.error("Error deserializing JSON to object", e);
-            throw new RuntimeException("Error deserializing JSON to object");
+            throw new RuntimeException(e);
         }
     }
 
-    protected void runHandlers(long userId) {
-        eventHandlers.forEach(eventHandler -> eventHandler.handle(userId));
-    }
 }

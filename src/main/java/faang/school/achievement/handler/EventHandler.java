@@ -4,5 +4,6 @@ import org.springframework.scheduling.annotation.Async;
 
 public interface EventHandler<T> {
     @Async("taskExecutor")
-    void handle(Long userId);
+    void handle(T event);
+
 }

@@ -12,16 +12,18 @@ import java.util.Map;
 @Component
 @RequiredArgsConstructor
 public class AchievementCache {
+
+    private final static Map<String, Achievement> ACHIEVEMENTS = new HashMap<>();
     private final AchievementRepository achievementRepository;
-    private final Map<String, Achievement> cache = new HashMap<>();
 
     @PostConstruct
-    void initialize() {
-        achievementRepository.findAll().forEach(achievement -> cache.put(achievement.getTitle(), achievement));
+    public void initialization() {
+        achievementRepository.findAll().forEach(achievement ->
+                ACHIEVEMENTS.put(achievement.getTitle(), achievement));
     }
 
-    public Achievement getAchievement(String title) {
-        return cache.get(title);
+    public Achievement get(String title) {
+        return ACHIEVEMENTS.get(title);
     }
 
 }

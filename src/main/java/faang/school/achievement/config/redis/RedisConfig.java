@@ -1,5 +1,6 @@
 package faang.school.achievement.config.redis;
 
+import faang.school.achievement.listener.MentorshipEventListener;
 import faang.school.achievement.listener.PostEventListener;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,17 +19,20 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 public class RedisConfig {
 
     @Value("${spring.data.redis.host}")
-    private String redisHost;
+    private String hostName;
     @Value("${spring.data.redis.port}")
-    private int redisPort;
+    private int port;
     @Value("${spring.data.redis.channel.post}")
     private String postChannelName;
+    @Value("${spring.data.redis.channel.mentorship}")
+    private String mentorshipChannel;
 
     private final PostEventListener postEventListener;
+    private final MentorshipEventListener mentorshipEventListener;
 
     @Bean
     public JedisConnectionFactory jedisConnectionFactory() {
-        RedisStandaloneConfiguration config = new RedisStandaloneConfiguration(redisHost, redisPort);
+        RedisStandaloneConfiguration config = new RedisStandaloneConfiguration(hostName, port);
         return new JedisConnectionFactory(config);
     }
 
@@ -47,16 +51,26 @@ public class RedisConfig {
     }
 
     @Bean
+    public ChannelTopic mentorshipTopic() {
+        return new ChannelTopic(mentorshipChannel);
+    }
+
+    @Bean
     MessageListenerAdapter postListener() {
         return new MessageListenerAdapter(postEventListener);
     }
 
     @Bean
+    public MessageListenerAdapter mentorshipListener() {
+        return new MessageListenerAdapter(mentorshipEventListener);
+    }
+
+    @Bean
     RedisMessageListenerContainer redisContainer() {
-        RedisMessageListenerContainer container
-                = new RedisMessageListenerContainer();
+        RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(jedisConnectionFactory());
         container.addMessageListener(postListener(), postChannel());
+        container.addMessageListener(mentorshipListener(), mentorshipTopic());
         return container;
     }
 }

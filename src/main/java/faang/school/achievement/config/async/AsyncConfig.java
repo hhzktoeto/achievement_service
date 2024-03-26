@@ -15,6 +15,8 @@ public class AsyncConfig {
     private int maxPoolSize;
     @Value("${async.queueCapacity}")
     private int queueCapacity;
+    @Value("${async.threadNamePrefix}")
+    private String threadNamePrefix;
 
     @Bean
     public ExecutorService taskExecutor() {
@@ -22,7 +24,9 @@ public class AsyncConfig {
         executor.setCorePoolSize(corePoolSize);
         executor.setMaxPoolSize(maxPoolSize);
         executor.setQueueCapacity(queueCapacity);
+        executor.setThreadNamePrefix(threadNamePrefix);
         executor.initialize();
         return executor.getThreadPoolExecutor();
     }
+
 }
