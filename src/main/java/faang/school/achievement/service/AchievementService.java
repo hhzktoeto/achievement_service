@@ -1,5 +1,6 @@
 package faang.school.achievement.service;
 
+import faang.school.achievement.dto.AchievementDto;
 import faang.school.achievement.model.Achievement;
 import faang.school.achievement.repository.AchievementRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -11,10 +12,9 @@ import org.springframework.stereotype.Service;
 public class AchievementService {
 
     private final AchievementRepository achievementRepository;
+    private final AchievementCache achievementCache;
 
-    public Achievement getAchievement(String title) {
-        return achievementRepository.findAchievementByTitle(title).orElseThrow(
-                () -> new EntityNotFoundException(String.format("Achievement not found by title: %s", title))
-        );
+    public AchievementDto getAchievement(String title) {
+        return achievementCache.get(title);
     }
 }

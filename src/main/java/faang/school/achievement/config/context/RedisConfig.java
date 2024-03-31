@@ -1,7 +1,8 @@
 package faang.school.achievement.config.context;
 
-import faang.school.achievement.listener.PostEventListener;
+import faang.school.achievement.listener.PostListener;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -41,16 +42,16 @@ public class RedisConfig {
         return template;
     }
 
-    @Bean
-    public MessageListenerAdapter postEventListener(PostEventListener postEventListener) {
-        return new MessageListenerAdapter(postEventListener);
+    @Bean(name = "postEventListener")
+    public MessageListenerAdapter postListener(PostListener postListener) {
+        return new MessageListenerAdapter(postListener, "onMessage");
     }
 
     @Bean
-    public RedisMessageListenerContainer redisMessageListenerContainer(MessageListenerAdapter postEventListener) {
+    public RedisMessageListenerContainer container(MessageListenerAdapter postListener) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(jedisConnectionFactory());
-        container.addMessageListener(postEventListener, postEventTopic());
+        container.addMessageListener(postListener, postEventTopic());
         return container;
     }
 

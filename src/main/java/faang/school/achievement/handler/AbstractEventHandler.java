@@ -1,5 +1,6 @@
 package faang.school.achievement.handler;
 
+import faang.school.achievement.mapper.AchievementMapper;
 import faang.school.achievement.model.Achievement;
 import faang.school.achievement.model.AchievementProgress;
 import faang.school.achievement.model.UserAchievement;
@@ -15,12 +16,13 @@ public class AbstractEventHandler<T> implements EventHandler<T> {
     private final AchievementService achievementService;
     private final UserAchievementService userAchievementService;
     private final AchievementProgressService achievementProgressService;
+    private final AchievementMapper achievementMapper;
     private final String title;
 
     @Override
     @Async
     public void handle(Long userId) {
-        Achievement achievement = achievementService.getAchievement(title);
+        Achievement achievement = achievementMapper.toEntity(achievementService.getAchievement(title));
         long achievementId = achievement.getId();
         if (!userAchievementService.userAchievementExists(userId, achievementId)) {
             AchievementProgress progress = achievementProgressService.getProgress(userId, achievementId);

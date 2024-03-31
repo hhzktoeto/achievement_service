@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class PostEventDto {
+    private long id;
     private long authorId;
-    private long postId;
 }

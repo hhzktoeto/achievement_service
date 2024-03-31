@@ -9,11 +9,11 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class PostEventListener extends AbstractEventListener<PostEventDto> {
+public class PostListener extends AbstractEventListener<PostEventDto> {
 
     private final List<EventHandler<PostEventDto>> handlers;
 
-    public PostEventListener(ObjectMapper objectMapper, List<EventHandler<PostEventDto>> handlers) {
+    public PostListener(ObjectMapper objectMapper, List<EventHandler<PostEventDto>> handlers) {
         super(objectMapper);
         this.handlers = handlers;
     }
