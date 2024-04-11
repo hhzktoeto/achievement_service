@@ -34,7 +34,7 @@ spring:
 
 achievements:
   comment:
-    expert: Expert
+    expert: EXPERT
 
 thread-pool:
   size: 10
