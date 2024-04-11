@@ -10,11 +10,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class AchievementPublisher {
+public class AchievementPublisher implements MessagePublisher<AchievementEvent> {
     private final RedisTemplate<String, Object> redisTemplate;
     private final ChannelTopic achievementTopic;
     private final ObjectMapper objectMapper;
 
+    @Override
     public void publish(AchievementEvent achievementEvent) throws JsonProcessingException {
         redisTemplate.convertAndSend(achievementTopic.getTopic(), objectMapper.writeValueAsString(achievementEvent));
     }
