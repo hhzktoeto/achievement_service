@@ -1,5 +1,10 @@
 package faang.school.achievement.config.context.redis;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import faang.school.achievement.event.AchievementEvent;
+import faang.school.achievement.publisher.AchievementPublisher;
+import faang.school.achievement.publisher.MessagePublisher;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,6 +15,7 @@ import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
+@RequiredArgsConstructor
 public class RedisConfig {
 
     @Value("${spring.data.redis.host}")
@@ -20,6 +26,8 @@ public class RedisConfig {
 
     @Value("${spring.data.redis.channel.achievement}")
     private String achievementTopic;
+
+    private final ObjectMapper objectMapper;
 
     @Bean
     ChannelTopic achievementTopic() {
@@ -39,5 +47,10 @@ public class RedisConfig {
         template.setKeySerializer(new StringRedisSerializer());
         template.setValueSerializer(new StringRedisSerializer());
         return template;
+    }
+
+    @Bean
+    public MessagePublisher<AchievementEvent> achievementEventPublisher () {
+        return new AchievementPublisher(redisTemplate(), achievementTopic(), objectMapper);
     }
 }

@@ -6,9 +6,7 @@ import faang.school.achievement.event.AchievementEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
-import org.springframework.stereotype.Component;
 
-@Component
 @RequiredArgsConstructor
 public class AchievementPublisher implements MessagePublisher<AchievementEvent> {
     private final RedisTemplate<String, Object> redisTemplate;
