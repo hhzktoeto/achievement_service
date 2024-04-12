@@ -35,3 +35,10 @@ logging:
 project-service:
   host: localhost
   port: 8082
+
+thread-pool:
+  size: 10
+
+achievement:
+  blogger:
+    name: BLOGGER
