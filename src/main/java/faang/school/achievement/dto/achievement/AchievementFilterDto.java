@@ -1,4 +1,4 @@
-package faang.school.achievement.dto;
+package faang.school.achievement.dto.achievement;
 
 import faang.school.achievement.model.Rarity;
 import jakarta.validation.constraints.Size;

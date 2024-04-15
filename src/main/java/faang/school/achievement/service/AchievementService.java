@@ -1,33 +1,38 @@
 package faang.school.achievement.service;
 
-import faang.school.achievement.dto.AchievementDto;
-import faang.school.achievement.dto.AchievementFilterDto;
-import faang.school.achievement.dto.UserAchievementDto;
+import faang.school.achievement.dto.achievement.AchievementDto;
+import faang.school.achievement.dto.achievement.AchievementFilterDto;
+import faang.school.achievement.dto.achievement.AchievementProgressDto;
+import faang.school.achievement.dto.achievement.UserAchievementDto;
 import faang.school.achievement.mapper.AchievementMapper;
+import faang.school.achievement.mapper.AchievementProgressMapper;
+import faang.school.achievement.mapper.UserAchievementMapper;
 import faang.school.achievement.model.Achievement;
+import faang.school.achievement.model.AchievementProgress;
 import faang.school.achievement.model.UserAchievement;
+import faang.school.achievement.repository.AchievementProgressRepository;
 import faang.school.achievement.repository.AchievementRepository;
 import faang.school.achievement.repository.UserAchievementRepository;
 import faang.school.achievement.service.filter.AchievementFilter;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class AchievementService {
-    private final AchievementDto achievementDto;
     private final AchievementRepository achievementRepository;
     private final List<AchievementFilter> achievementFilters;
     private final AchievementMapper achievementMapper;
+    private final UserAchievementMapper userAchievementMapper;
+    private final AchievementProgressMapper achievementProgressMapper;
     private final UserAchievementRepository userAchievementRepository;
+    private final AchievementProgressRepository achievementProgressRepository;
 
-    public List<AchievementDto> findAllAchievement(AchievementFilterDto filters) {
+    public List<AchievementDto> getAllAchievement(AchievementFilterDto filters) {
         List<Achievement> achievements = (List<Achievement>) achievementRepository.findAll();
 
         if (!achievementFilters.isEmpty()) {
@@ -35,20 +40,21 @@ public class AchievementService {
                     .filter(filter -> filter.isApplicable(filters))
                     .forEach(filter -> filter.apply(achievements, filters));
         }
-        return achievementMapper.toDtoAchievements(achievements);
+        return achievementMapper.toDtoAchievementsList(achievements);
     }
-    public List<UserAchievementDto> findAllAchievementByUser(Long userId){
+
+    public List<UserAchievementDto> getAllAchievementByUser(Long userId) {
         List<UserAchievement> userAchievements = (List<UserAchievement>) userAchievementRepository.findAllById(Collections.singletonList(userId));
-        return achievementMapper.toDtoUserAchievements(userAchievements);
+        return userAchievementMapper.toDtoUserAchievementsList(userAchievements);
     }
 
-    public AchievementDto findAchievementById(Long achievementId){
-        return achievementMapper.toDtoUserAchievements(achievementRepository.findById(achievementId));
+    public AchievementDto getAchievementById(Long achievementId) {
+        Achievement achievement = achievementRepository.findById(achievementId).orElseThrow(() -> new EntityNotFoundException("Achievement for this" + achievementId + "not found"));
+        return achievementMapper.toDto(achievement);
     }
 
-    public List<AchievementDto> findAcivByUserInProgress(Long userId){
-        findAllAchievementByUser(userId).
-
+    public List<AchievementProgressDto> getAchievementInProgressOfUser(Long userId) {
+        List<AchievementProgress> achievementProgress = achievementProgressRepository.findByUserId(userId);
+        return achievementProgressMapper.toListAchievementProgressDto(achievementProgress);
     }
-
 }
