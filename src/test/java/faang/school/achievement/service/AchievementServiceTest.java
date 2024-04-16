@@ -64,22 +64,22 @@ class AchievementServiceTest {
                 .id(1L)
                 .build();
         achievement2 = Achievement.builder()
-                .id(1L)
+                .id(2L)
                 .build();
         achievement3 = Achievement.builder()
-                .id(1L)
+                .id(3L)
                 .build();
         userAchievement1 = UserAchievement.builder()
                 .userId(1L)
                 .build();
         userAchievement2 = UserAchievement.builder()
-                .userId(1L)
+                .userId(2L)
                 .build();
         progress1 = AchievementProgress.builder()
                 .userId(1L)
                 .build();
         progress2 = AchievementProgress.builder()
-                .userId(1L)
+                .userId(2L)
                 .build();
     }
 
@@ -94,7 +94,7 @@ class AchievementServiceTest {
         Mockito.when(achievementRepository.findAll()).thenReturn(achievements);
         Mockito.when(achievementFilters.isEmpty()).thenReturn(true);
 
-        List<AchievementDto> actualDto = achievementService.getAllAchievement(new AchievementFilterDto());
+        List<AchievementDto> actualDto = achievementService.getAllAchievements(new AchievementFilterDto());
 
         Assertions.assertEquals(expectedDto, actualDto);
         verify(achievementRepository, times(1)).findAll();
@@ -111,7 +111,7 @@ class AchievementServiceTest {
 
         Mockito.when(userAchievementRepository.findAllById(Collections.singletonList(userId))).thenReturn(userAchievements);
 
-        List<UserAchievementDto> actualDtos = achievementService.getAllAchievementByUser(userId);
+        List<UserAchievementDto> actualDtos = achievementService.getAllUserAchievements(userId);
 
         Assertions.assertEquals(expectedDtos, actualDtos);
         verify(userAchievementRepository, times(1)).findAllById(Collections.singletonList(userId));
@@ -140,7 +140,7 @@ class AchievementServiceTest {
 
         Mockito.when(achievementProgressRepository.findByUserId(userId)).thenReturn(achievementProgress);
 
-        List<AchievementProgressDto> actualDtos = achievementService.getAchievementInProgressOfUser(userId);
+        List<AchievementProgressDto> actualDtos = achievementService.getProgressingUserAchievements(userId);
 
         Assertions.assertEquals(expectedDtos, actualDtos);
         verify(achievementProgressRepository, times(1)).findByUserId(userId);

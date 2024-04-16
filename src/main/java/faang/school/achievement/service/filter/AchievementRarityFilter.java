@@ -10,6 +10,7 @@ public class AchievementRarityFilter implements AchievementFilter{
     public boolean isApplicable(AchievementFilterDto filters) {
         return filters.getRarity() != null;
     }
+
     @Override
     public void apply(List<Achievement> achievements, AchievementFilterDto filters) {
         achievements.removeIf(achievement -> !achievement.getRarity().equals(filters.getRarity()));

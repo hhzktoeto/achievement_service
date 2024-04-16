@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -20,18 +21,18 @@ import java.util.List;
 @Validated
 @RequiredArgsConstructor
 @Controller
-@RequestMapping("/achievement")
+@RequestMapping("/achievements")
 public class AchievementController {
     private final AchievementService achievementService;
 
-    @GetMapping("/filtered")
-    public List<AchievementDto> getAllAchievement(@RequestBody AchievementFilterDto filters) {
-        return achievementService.getAllAchievement(filters);
+    @PostMapping("/filtered")
+    public List<AchievementDto> getAllAchievements(@RequestBody AchievementFilterDto filters) {
+        return achievementService.getAllAchievements(filters);
     }
 
-    @GetMapping("/{userId}/all")
-    public List<UserAchievementDto> getAllAchievementByUser(@PathVariable Long userId) {
-        return achievementService.getAllAchievementByUser(userId);
+    @GetMapping("/user/{userId}")
+    public List<UserAchievementDto> getAllUserAchievements(@PathVariable Long userId) {
+        return achievementService.getAllUserAchievements(userId);
     }
 
     @Async
@@ -41,8 +42,8 @@ public class AchievementController {
         return achievementService.getAchievementById(achievementId);
     }
 
-    @GetMapping("/{userId}/inProgress")
-    public List<AchievementProgressDto> getAchievementInProgressOfUser(@PathVariable Long userId) {
-        return achievementService.getAchievementInProgressOfUser(userId);
+    @GetMapping("/{userId}/progressing")
+    public List<AchievementProgressDto> getProgressingUserAchievements(@PathVariable Long userId) {
+        return achievementService.getProgressingUserAchievements(userId);
     }
 }

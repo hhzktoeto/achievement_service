@@ -17,7 +17,4 @@ public class AchievementProgressDto {
     private List<Long> achievementId;
     private long userId;
     private long currentPoints;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-    private long version;
 }
