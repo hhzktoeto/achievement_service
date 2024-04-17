@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Component
@@ -23,6 +24,7 @@ public class ExpertAchievementHandler implements EventHandler<CommentEvent> {
     private final AchievementCache achievementCache;
     private final AchievementService achievementService;
 
+    @Transactional
     @Async(value = "executorService")
     public void handle(CommentEvent event) {
         log.info("Received comment event: {}", event);
