@@ -20,6 +20,8 @@ public interface AchievementProgressMapper {
 
     @Named("toAchievementId")
     default List<Long> toAchievementId(List<Achievement> achievement) {
-        return achievement.stream().map(Achievement::getId).toList();
+        return achievement.stream()
+                .map(Achievement::getId)
+                .toList();
     }
 }

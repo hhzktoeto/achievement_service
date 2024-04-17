@@ -33,7 +33,7 @@ public class AchievementService {
     private final AchievementProgressRepository achievementProgressRepository;
 
     public List<AchievementDto> getAllAchievements(AchievementFilterDto filters) {
-        List<Achievement> achievements = (List<Achievement>) achievementRepository.findAll();
+        List<Achievement> achievements = achievementRepository.findAll();
 
         if (!achievementFilters.isEmpty()) {
             achievementFilters.stream()
@@ -44,7 +44,7 @@ public class AchievementService {
     }
 
     public List<UserAchievementDto> getAllUserAchievements(Long userId) {
-        List<UserAchievement> userAchievements = (List<UserAchievement>) userAchievementRepository.findAllById(Collections.singletonList(userId));
+        List<UserAchievement> userAchievements = userAchievementRepository.findByUserId(userId);
         return userAchievementMapper.toDtoUserAchievementsList(userAchievements);
     }
 

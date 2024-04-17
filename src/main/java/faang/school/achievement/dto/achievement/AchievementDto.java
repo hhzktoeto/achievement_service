@@ -22,10 +22,4 @@ public class AchievementDto {
     @Size(max = 255, message = "Achievement description pattern can't be longer than 255 characters")
     private String description;
     private Rarity rarity;
-    private List<UserAchievement> userAchievements;
-    private List<AchievementProgress> progresses;
-    private long points;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-
 }

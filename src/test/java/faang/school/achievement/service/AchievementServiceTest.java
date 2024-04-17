@@ -109,12 +109,12 @@ class AchievementServiceTest {
         List<UserAchievementDto> expectedDtos = Arrays.asList(userAchievementMapper.toDto(userAchievement1),
                 userAchievementMapper.toDto(userAchievement2));
 
-        Mockito.when(userAchievementRepository.findAllById(Collections.singletonList(userId))).thenReturn(userAchievements);
+        Mockito.when(userAchievementRepository.findByUserId(userId)).thenReturn(userAchievements);
 
         List<UserAchievementDto> actualDtos = achievementService.getAllUserAchievements(userId);
 
         Assertions.assertEquals(expectedDtos, actualDtos);
-        verify(userAchievementRepository, times(1)).findAllById(Collections.singletonList(userId));
+        verify(userAchievementRepository, times(1)).findByUserId(userId);
         verify(userAchievementMapper, times(1)).toDtoUserAchievementsList(userAchievements);
     }
 
