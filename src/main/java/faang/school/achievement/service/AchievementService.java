@@ -17,6 +17,7 @@ import faang.school.achievement.service.filter.AchievementFilter;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
@@ -57,4 +58,10 @@ public class AchievementService {
         List<AchievementProgress> achievementProgress = achievementProgressRepository.findByUserId(userId);
         return achievementProgressMapper.toListAchievementProgressDto(achievementProgress);
     }
+
+    @Transactional(readOnly = true)
+    public boolean hasAchievement(long userId, long achievementId) {
+        return userAchievementRepository.existsByUserIdAndAchievementId(userId, achievementId);
+    }
+
 }

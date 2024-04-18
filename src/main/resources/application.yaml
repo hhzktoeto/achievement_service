@@ -24,6 +24,9 @@ spring:
       channel:
         achievement: achievement_channel
         follower: follower_channel
+        project_create_channel:
+          name: project_create
+
 
 server:
   port: 8085
@@ -35,3 +38,8 @@ logging:
 project-service:
   host: localhost
   port: 8082
+
+
+achievement:
+  businessman:
+    name: BUSINESSMAN
