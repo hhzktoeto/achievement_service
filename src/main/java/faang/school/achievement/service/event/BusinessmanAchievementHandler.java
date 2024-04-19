@@ -29,7 +29,6 @@ public class BusinessmanAchievementHandler implements EventHandler<ProjectCreate
         log.info("BloggerAchievementHandler handling follower event: {}", event);
         Achievement businessmanAchievement = getAchievementFromCache();
         long userId = event.getUserId();
-        long projectId = event.getProjectId();
         long achievementId = businessmanAchievement.getId();
 
         if (achievementService.hasAchievement(userId, achievementId)) {

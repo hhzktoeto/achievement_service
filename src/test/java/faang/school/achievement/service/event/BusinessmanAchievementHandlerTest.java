@@ -17,20 +17,19 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class BloggerAchievementHandlerTest {
+class BusinessmanAchievementHandlerTest {
 
     @Mock
     AchievementCache achievementCache;
     @Mock
     AchievementService achievementService;
     @InjectMocks
-    BusinessmanAchievementHandler bloggerAchievementHandler;
+    BusinessmanAchievementHandler businessmanAchievementHandler;
 
     private Achievement businessmanAchievement;
     private AchievementProgress businessmanAchievementProgress;
@@ -43,7 +42,7 @@ class BloggerAchievementHandlerTest {
                 .projectId(2L)
                 .build();
         businessmanAchievement = Achievement.builder()
-                .id(10L)
+                .id(1L)
                 .title("BUSINESSMAN")
                 .build();
         businessmanAchievementProgress = AchievementProgress.builder()
@@ -54,10 +53,10 @@ class BloggerAchievementHandlerTest {
     }
 
     @Test
-    void handle_UserHasntGotAchievement_AchievementProgressIncreased() throws NoSuchFieldException, IllegalAccessException {
+    void handle_UserHasNotGotAchievement_AchievementProgressIncreased() throws NoSuchFieldException, IllegalAccessException {
         Field businessmanAchievementTitle = BusinessmanAchievementHandler.class.getDeclaredField("businessmanAchievementTitle");
         businessmanAchievementTitle.setAccessible(true);
-        businessmanAchievementTitle.set(bloggerAchievementHandler, "BUSINESSMAN");
+        businessmanAchievementTitle.set(businessmanAchievementHandler, "BUSINESSMAN");
         long userId = projectCreateEvent.getUserId();
         long achievementId = businessmanAchievement.getId();
         String achievementTitle = businessmanAchievement.getTitle();
@@ -65,7 +64,7 @@ class BloggerAchievementHandlerTest {
         when(achievementService.hasAchievement(userId, achievementId)).thenReturn(false);
         when(achievementService.getProgress(userId, achievementId)).thenReturn(businessmanAchievementProgress);
 
-        bloggerAchievementHandler.handle(projectCreateEvent);
+        businessmanAchievementHandler.handle(projectCreateEvent);
 
         assertAll(
                 () -> verify(achievementCache, times(1)).get(achievementTitle),
@@ -79,23 +78,24 @@ class BloggerAchievementHandlerTest {
 
     @Test
     void handle_UserAlreadyGotAchievement_HandlingIgnored() throws NoSuchFieldException, IllegalAccessException {
-        Field bloggerAchievementTitle = BloggerAchievementHandler.class.getDeclaredField("bloggerAchievementTitle");
-        bloggerAchievementTitle.setAccessible(true);
-        bloggerAchievementTitle.set(bloggerAchievementHandler, "BLOGGER");
-        long userId = followerEvent.getFolloweeId();
+        Field businessmanAchievementTitle = BusinessmanAchievementHandler.class.getDeclaredField("businessmanAchievementTitle");
+        businessmanAchievementTitle.setAccessible(true);
+        businessmanAchievementTitle.set(businessmanAchievementHandler, "BUSINESSMAN");
+        long userId = projectCreateEvent.getUserId();
         long achievementId = businessmanAchievement.getId();
         String achievementTitle = businessmanAchievement.getTitle();
         when(achievementCache.get(businessmanAchievement.getTitle())).thenReturn(Optional.ofNullable(businessmanAchievement));
         when(achievementService.hasAchievement(userId, achievementId)).thenReturn(true);
+        when(achievementService.getProgress(userId, achievementId)).thenReturn(businessmanAchievementProgress);
 
-        bloggerAchievementHandler.handle(followerEvent);
+        businessmanAchievementHandler.handle(projectCreateEvent);
 
         assertAll(
                 () -> verify(achievementCache, times(1)).get(achievementTitle),
                 () -> verify(achievementService, times(1)).hasAchievement(userId, achievementId),
-                () -> verify(achievementService, never()).createProgressIfNecessary(userId, achievementId),
-                () -> verify(achievementService, never()).getProgress(userId, achievementId),
-                () -> verify(achievementService, never()).giveAchievement(userId, businessmanAchievement)
+                () -> verify(achievementService, times(1)).createProgressIfNecessary(userId, achievementId),
+                () -> verify(achievementService, times(1)).getProgress(userId, achievementId),
+                () -> verify(achievementService, times(1)).giveAchievement(userId, businessmanAchievement)
         );
     }
 }
