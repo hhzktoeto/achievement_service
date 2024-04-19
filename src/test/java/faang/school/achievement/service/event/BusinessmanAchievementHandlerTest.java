@@ -1,7 +1,7 @@
 package faang.school.achievement.service.event;
 
 import faang.school.achievement.cache.AchievementCache;
-import faang.school.achievement.event.follower.FollowerEvent;
+import faang.school.achievement.event.ProjectCreateEvent;
 import faang.school.achievement.model.Achievement;
 import faang.school.achievement.model.AchievementProgress;
 import faang.school.achievement.service.AchievementService;
@@ -30,50 +30,50 @@ class BloggerAchievementHandlerTest {
     @Mock
     AchievementService achievementService;
     @InjectMocks
-    BloggerAchievementHandler bloggerAchievementHandler;
+    BusinessmanAchievementHandler bloggerAchievementHandler;
 
-    private Achievement bloggerAchievement;
-    private AchievementProgress bloggerAchievementProgress;
-    private FollowerEvent followerEvent;
+    private Achievement businessmanAchievement;
+    private AchievementProgress businessmanAchievementProgress;
+    private ProjectCreateEvent projectCreateEvent;
 
     @BeforeEach
     void setUp() {
-        followerEvent = FollowerEvent.builder()
-                .followeeId(1L)
-                .followerId(2L)
+        projectCreateEvent = ProjectCreateEvent.builder()
+                .userId(1L)
+                .projectId(2L)
                 .build();
-        bloggerAchievement = Achievement.builder()
+        businessmanAchievement = Achievement.builder()
                 .id(10L)
-                .title("BLOGGER")
+                .title("BUSINESSMAN")
                 .build();
-        bloggerAchievementProgress = AchievementProgress.builder()
-                .achievement(bloggerAchievement)
+        businessmanAchievementProgress = AchievementProgress.builder()
+                .achievement(businessmanAchievement)
                 .currentPoints(0L)
-                .userId(followerEvent.getFolloweeId())
+                .userId(projectCreateEvent.getUserId())
                 .build();
     }
 
     @Test
     void handle_UserHasntGotAchievement_AchievementProgressIncreased() throws NoSuchFieldException, IllegalAccessException {
-        Field bloggerAchievementTitle = BloggerAchievementHandler.class.getDeclaredField("bloggerAchievementTitle");
-        bloggerAchievementTitle.setAccessible(true);
-        bloggerAchievementTitle.set(bloggerAchievementHandler, "BLOGGER");
-        long userId = followerEvent.getFolloweeId();
-        long achievementId = bloggerAchievement.getId();
-        String achievementTitle = bloggerAchievement.getTitle();
-        when(achievementCache.get(achievementTitle)).thenReturn(Optional.ofNullable(bloggerAchievement));
+        Field businessmanAchievementTitle = BusinessmanAchievementHandler.class.getDeclaredField("businessmanAchievementTitle");
+        businessmanAchievementTitle.setAccessible(true);
+        businessmanAchievementTitle.set(bloggerAchievementHandler, "BUSINESSMAN");
+        long userId = projectCreateEvent.getUserId();
+        long achievementId = businessmanAchievement.getId();
+        String achievementTitle = businessmanAchievement.getTitle();
+        when(achievementCache.get(achievementTitle)).thenReturn(Optional.ofNullable(businessmanAchievement));
         when(achievementService.hasAchievement(userId, achievementId)).thenReturn(false);
-        when(achievementService.getProgress(userId, achievementId)).thenReturn(bloggerAchievementProgress);
+        when(achievementService.getProgress(userId, achievementId)).thenReturn(businessmanAchievementProgress);
 
-        bloggerAchievementHandler.handle(followerEvent);
+        bloggerAchievementHandler.handle(projectCreateEvent);
 
         assertAll(
                 () -> verify(achievementCache, times(1)).get(achievementTitle),
                 () -> verify(achievementService, times(1)).hasAchievement(userId, achievementId),
                 () -> verify(achievementService, times(1)).createProgressIfNecessary(userId, achievementId),
                 () -> verify(achievementService, times(1)).getProgress(userId, achievementId),
-                () -> verify(achievementService, times(1)).giveAchievement(userId, bloggerAchievement),
-                () -> assertEquals(1L, bloggerAchievementProgress.getCurrentPoints())
+                () -> verify(achievementService, times(1)).giveAchievement(userId, businessmanAchievement),
+                () -> assertEquals(1L, businessmanAchievementProgress.getCurrentPoints())
         );
     }
 
@@ -83,9 +83,9 @@ class BloggerAchievementHandlerTest {
         bloggerAchievementTitle.setAccessible(true);
         bloggerAchievementTitle.set(bloggerAchievementHandler, "BLOGGER");
         long userId = followerEvent.getFolloweeId();
-        long achievementId = bloggerAchievement.getId();
-        String achievementTitle = bloggerAchievement.getTitle();
-        when(achievementCache.get(bloggerAchievement.getTitle())).thenReturn(Optional.ofNullable(bloggerAchievement));
+        long achievementId = businessmanAchievement.getId();
+        String achievementTitle = businessmanAchievement.getTitle();
+        when(achievementCache.get(businessmanAchievement.getTitle())).thenReturn(Optional.ofNullable(businessmanAchievement));
         when(achievementService.hasAchievement(userId, achievementId)).thenReturn(true);
 
         bloggerAchievementHandler.handle(followerEvent);
@@ -95,7 +95,7 @@ class BloggerAchievementHandlerTest {
                 () -> verify(achievementService, times(1)).hasAchievement(userId, achievementId),
                 () -> verify(achievementService, never()).createProgressIfNecessary(userId, achievementId),
                 () -> verify(achievementService, never()).getProgress(userId, achievementId),
-                () -> verify(achievementService, never()).giveAchievement(userId, bloggerAchievement)
+                () -> verify(achievementService, never()).giveAchievement(userId, businessmanAchievement)
         );
     }
 }
