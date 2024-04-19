@@ -19,7 +19,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -60,8 +59,26 @@ public class AchievementService {
     }
 
     @Transactional(readOnly = true)
-    public boolean hasAchievement(long userId, long achievementId) {
+    public boolean hasAchievement(Long userId, Long achievementId) {
         return userAchievementRepository.existsByUserIdAndAchievementId(userId, achievementId);
     }
 
+    @Transactional
+    public void createProgressIfNecessary(Long userId, Long achievementId) {
+        achievementProgressRepository.createProgressIfNecessary(userId, achievementId);
+    }
+
+    @Transactional
+    public AchievementProgress getProgress(Long userId, Long achievementId) {
+        return achievementProgressRepository.findByUserIdAndAchievementId(userId, achievementId)
+                .orElseThrow(() -> new EntityNotFoundException("Progress does not exist"));
+    }
+
+    @Transactional
+    public void giveAchievement(long userId, Achievement achievement) {
+        userAchievementRepository.save(UserAchievement.builder()
+                .achievement(achievement)
+                .userId(userId)
+                .build());
+    }
 }
