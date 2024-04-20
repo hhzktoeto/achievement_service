@@ -86,16 +86,15 @@ class BusinessmanAchievementHandlerTest {
         String achievementTitle = businessmanAchievement.getTitle();
         when(achievementCache.get(businessmanAchievement.getTitle())).thenReturn(Optional.ofNullable(businessmanAchievement));
         when(achievementService.hasAchievement(userId, achievementId)).thenReturn(true);
-        when(achievementService.getProgress(userId, achievementId)).thenReturn(businessmanAchievementProgress);
 
         businessmanAchievementHandler.handle(projectCreateEvent);
 
         assertAll(
                 () -> verify(achievementCache, times(1)).get(achievementTitle),
                 () -> verify(achievementService, times(1)).hasAchievement(userId, achievementId),
-                () -> verify(achievementService, times(1)).createProgressIfNecessary(userId, achievementId),
-                () -> verify(achievementService, times(1)).getProgress(userId, achievementId),
-                () -> verify(achievementService, times(1)).giveAchievement(userId, businessmanAchievement)
+                () -> verify(achievementService, times(0)).createProgressIfNecessary(userId, achievementId),
+                () -> verify(achievementService, times(0)).getProgress(userId, achievementId),
+                () -> verify(achievementService, times(0)).giveAchievement(userId, businessmanAchievement)
         );
     }
 }

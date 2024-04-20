@@ -33,6 +33,8 @@ public class BusinessmanAchievementHandler implements EventHandler<ProjectCreate
 
         if (achievementService.hasAchievement(userId, achievementId)) {
             log.info("User {} already has achievement {}", userId, businessmanAchievementTitle);
+            log.info("Skipping further processing as the user already has this achievement.");
+            return;
         }
         achievementService.createProgressIfNecessary(userId, achievementId);
         AchievementProgress achievementProgress = achievementService.getProgress(userId, achievementId);
