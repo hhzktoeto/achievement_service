@@ -1,8 +1,9 @@
 package faang.school.achievement.listener;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import faang.school.achievement.event.comment.CommentEvent;
 import faang.school.achievement.service.event.EventHandler;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
@@ -11,14 +12,19 @@ import java.util.List;
 
 @Slf4j
 @Component
-@RequiredArgsConstructor
-public class CommentEventListener {
+public class CommentEventListener extends AbstractEventListener<CommentEvent> {
 
-    private final List<EventHandler<CommentEvent>> commentHandlers;
+    public CommentEventListener(List<EventHandler<CommentEvent>> commentHandlers, ObjectMapper objectMapper) {
+        super(commentHandlers, objectMapper);
+    }
 
     @KafkaListener(topics = "${spring.data.kafka.channels.comment-channel.name}", groupId = "${spring.data.kafka.group-id}")
-    public void listen(CommentEvent event) {
-        commentHandlers.forEach(handler -> handler.handle(event));
-        log.info("Handled comment event: {}", event);
+    public void listen(String event) {
+        try {
+            CommentEvent commentEvent = objectMapper.readValue(event, CommentEvent.class);
+            commentHandlers.forEach(handler -> handler.handle(commentEvent));
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
