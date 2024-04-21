@@ -20,12 +20,13 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 public class RedisConfig {
 
     private final ProjectCreateEventListener projectCreateEventListener;
+
     @Value("${spring.data.redis.host}")
     private String host;
     @Value("${spring.data.redis.port}")
     private int port;
-    @Value("${spring.data.redis.channels.project_create_channel.name}")
-    private String channel;
+    @Value("${spring.data.redis.channel.project-create-channel}")
+    private String projectCreateChannel;
 
     @Bean
     JedisConnectionFactory redisConnectionFactory() {
@@ -57,6 +58,6 @@ public class RedisConfig {
 
     @Bean
     public ChannelTopic projectCreateTopic() {
-        return new ChannelTopic(channel);
+        return new ChannelTopic(projectCreateChannel);
     }
 }

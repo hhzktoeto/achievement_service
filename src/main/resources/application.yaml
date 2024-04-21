@@ -24,8 +24,8 @@ spring:
       channel:
         achievement: achievement_channel
         follower: follower_channel
-        project_create_channel:
-          name: project_create
+        project-create-channel: project_create
+
 
 
 server:
