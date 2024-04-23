@@ -16,11 +16,10 @@ import java.io.IOException;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class ProjectCreateEventListener implements MessageListener {
+public class ProjectCreateEventListener extends EventListener {
     private ObjectMapper objectMapper;
     private BusinessmanAchievementHandler businessmanAchievementHandler;
 
-    @Async
     @Override
     public void onMessage(Message message, byte[] pattern) {
         log.info("InviteEventListener has received a new message from Redis");

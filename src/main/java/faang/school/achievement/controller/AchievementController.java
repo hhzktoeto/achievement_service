@@ -1,5 +1,6 @@
 package faang.school.achievement.controller;
 
+import faang.school.achievement.config.context.UserContext;
 import faang.school.achievement.dto.achievement.AchievementDto;
 import faang.school.achievement.dto.achievement.AchievementFilterDto;
 import faang.school.achievement.dto.achievement.AchievementProgressDto;
@@ -24,26 +25,27 @@ import java.util.List;
 @RequestMapping("/achievements")
 public class AchievementController {
     private final AchievementService achievementService;
+    private final UserContext userContext;
 
     @PostMapping("/filtered")
     public List<AchievementDto> getAllAchievements(@RequestBody AchievementFilterDto filters) {
         return achievementService.getAllAchievements(filters);
     }
 
-    @GetMapping("/user/{userId}")
-    public List<UserAchievementDto> getAllUserAchievements(@PathVariable Long userId) {
+    @GetMapping("/achievements")
+    public List<UserAchievementDto> getAllUserAchievements() {
+        long userId = userContext.getUserId();
         return achievementService.getAllUserAchievements(userId);
     }
 
-    @Async
-    @Cacheable(cacheNames = "achievementId", key = "#achievementId")
     @GetMapping("/{achievementId}")
     public AchievementDto getAchievement(@PathVariable Long achievementId) {
         return achievementService.getAchievementById(achievementId);
     }
 
     @GetMapping("/{userId}/progressing")
-    public List<AchievementProgressDto> getProgressingUserAchievements(@PathVariable Long userId) {
+    public List<AchievementProgressDto> getProgressingUserAchievements() {
+        long userId = userContext.getUserId();
         return achievementService.getProgressingUserAchievements(userId);
     }
 }

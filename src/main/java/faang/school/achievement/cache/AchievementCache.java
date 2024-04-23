@@ -18,7 +18,7 @@ public class AchievementCache {
 
     private final AchievementRepository achievementRepository;
 
-    private Map<String, Achievement> achievements = new HashMap<>();
+    private static Map<String, Achievement> achievements = new HashMap<>();
 
     @PostConstruct
     public void init() {

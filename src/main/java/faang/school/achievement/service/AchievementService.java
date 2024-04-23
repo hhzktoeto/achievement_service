@@ -16,6 +16,8 @@ import faang.school.achievement.repository.UserAchievementRepository;
 import faang.school.achievement.service.filter.AchievementFilter;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,6 +50,8 @@ public class AchievementService {
         return userAchievementMapper.toDtoUserAchievementsList(userAchievements);
     }
 
+    @Async
+    @Cacheable(cacheNames = "achievementId", key = "#achievementId")
     public AchievementDto getAchievementById(Long achievementId) {
         Achievement achievement = achievementRepository.findById(achievementId).orElseThrow(() -> new EntityNotFoundException("Achievement for this" + achievementId + "not found"));
         return achievementMapper.toDto(achievement);
