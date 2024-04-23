@@ -5,14 +5,13 @@ import faang.school.achievement.event.follower.FollowerEvent;
 import faang.school.achievement.model.Achievement;
 import faang.school.achievement.model.AchievementProgress;
 import faang.school.achievement.service.AchievementService;
+import faang.school.achievement.service.event.blogger.BloggerAchievementHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.lang.reflect.Field;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -29,12 +28,12 @@ class BloggerAchievementHandlerTest {
     AchievementCache achievementCache;
     @Mock
     AchievementService achievementService;
-    @InjectMocks
     BloggerAchievementHandler bloggerAchievementHandler;
 
     private Achievement bloggerAchievement;
     private AchievementProgress bloggerAchievementProgress;
     private FollowerEvent followerEvent;
+    private String bloggerAchievementTitle;
 
     @BeforeEach
     void setUp() {
@@ -51,13 +50,12 @@ class BloggerAchievementHandlerTest {
                 .currentPoints(0L)
                 .userId(followerEvent.getFolloweeId())
                 .build();
+        bloggerAchievementTitle = "BLOGGER";
+        bloggerAchievementHandler = new BloggerAchievementHandler(achievementService, achievementCache, bloggerAchievementTitle);
     }
 
     @Test
     void handle_UserHasntGotAchievement_AchievementProgressIncreased() throws NoSuchFieldException, IllegalAccessException {
-        Field bloggerAchievementTitle = BloggerAchievementHandler.class.getDeclaredField("bloggerAchievementTitle");
-        bloggerAchievementTitle.setAccessible(true);
-        bloggerAchievementTitle.set(bloggerAchievementHandler, "BLOGGER");
         long userId = followerEvent.getFolloweeId();
         long achievementId = bloggerAchievement.getId();
         String achievementTitle = bloggerAchievement.getTitle();
@@ -79,9 +77,6 @@ class BloggerAchievementHandlerTest {
 
     @Test
     void handle_UserAlreadyGotAchievement_HandlingIgnored() throws NoSuchFieldException, IllegalAccessException {
-        Field bloggerAchievementTitle = BloggerAchievementHandler.class.getDeclaredField("bloggerAchievementTitle");
-        bloggerAchievementTitle.setAccessible(true);
-        bloggerAchievementTitle.set(bloggerAchievementHandler, "BLOGGER");
         long userId = followerEvent.getFolloweeId();
         long achievementId = bloggerAchievement.getId();
         String achievementTitle = bloggerAchievement.getTitle();

@@ -8,42 +8,36 @@ import faang.school.achievement.service.AchievementService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Component;
 
 @Slf4j
-@Component
 @RequiredArgsConstructor
-public class BloggerAchievementHandler implements EventHandler<FollowerEvent> {
-    private final AchievementCache achievementCache;
-    private final AchievementService achievementService;
-
-    @Value("${achievement.blogger.name}")
-    private String bloggerAchievementTitle;
+public abstract class AbstractFollowerEventHandler implements EventHandler<FollowerEvent> {
+    protected final AchievementService achievementService;
+    protected final AchievementCache achievementCache;
+    protected final String achievementTitle;
 
     @Override
     @Async("executorService")
     public void handle(FollowerEvent event) {
-        log.info("BloggerAchievementHandler handling follower event: {}", event);
-        Achievement bloggerAchievement = getAchievementFromCache();
+        Achievement achievement = getAchievementFromCache();
         long userId = event.getFolloweeId();
-        long achievementId = bloggerAchievement.getId();
+        long achievementId = achievement.getId();
 
         if (achievementService.hasAchievement(userId, achievementId)) {
-            log.info("User {} already has achievement {}", userId, bloggerAchievementTitle);
+            log.info("User {} already has achievement {}", userId, achievementTitle);
             return;
         }
         achievementService.createProgressIfNecessary(userId, achievementId);
         AchievementProgress achievementProgress = achievementService.getProgress(userId, achievementId);
         achievementProgress.increment();
-        if (achievementProgress.getCurrentPoints() >= bloggerAchievement.getPoints()) {
-            achievementService.giveAchievement(userId, bloggerAchievement);
+        if (achievementProgress.getCurrentPoints() >= achievement.getPoints()) {
+            achievementService.giveAchievement(userId, achievement);
         }
     }
 
     private Achievement getAchievementFromCache() {
-        return achievementCache.get(bloggerAchievementTitle)
-                .orElseThrow(() -> new EntityNotFoundException(String.format("Achievement %s not found", bloggerAchievementTitle)));
+        return achievementCache.get(achievementTitle)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Achievement %s not found", achievementTitle)));
     }
 }
