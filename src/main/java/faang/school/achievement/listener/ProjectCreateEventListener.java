@@ -3,31 +3,25 @@ package faang.school.achievement.listener;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import faang.school.achievement.event.ProjectCreateEvent;
 import faang.school.achievement.service.event.BusinessmanAchievementHandler;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import faang.school.achievement.service.event.EventHandler;
+import lombok.NonNull;
 import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;
-import org.springframework.data.redis.serializer.SerializationException;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
+import java.util.List;
 
-@Slf4j
-@RequiredArgsConstructor
 @Component
-public class ProjectCreateEventListener implements MessageListener {
-    private ObjectMapper objectMapper;
+public class ProjectCreateEventListener extends AbstractEventListener<ProjectCreateEvent> implements MessageListener {
     private BusinessmanAchievementHandler businessmanAchievementHandler;
 
+    public ProjectCreateEventListener(ObjectMapper objectMapper, List<EventHandler<ProjectCreateEvent>> eventHandlers) {
+        super(objectMapper, eventHandlers);
+    }
+
     @Override
-    public void onMessage(Message message, byte[] pattern) {
-        log.info("InviteEventListener has received a new message from Redis");
-        try {
-            ProjectCreateEvent projectCreateEvent = objectMapper.readValue(message.getBody(), ProjectCreateEvent.class);
-            businessmanAchievementHandler.handle(projectCreateEvent);
-        } catch (IOException e) {
-            log.error("Error parsing JSON message");
-            throw new SerializationException("Error parsing JSON message");
-        }
+    public void onMessage(@NonNull Message message, byte[] pattern) {
+        ProjectCreateEvent event = mapEvent(message, ProjectCreateEvent.class);
+        businessmanAchievementHandler.handle(event);
     }
 }
