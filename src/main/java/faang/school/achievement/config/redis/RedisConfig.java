@@ -1,4 +1,4 @@
-package faang.school.achievement.config.context.redis;
+package faang.school.achievement.config.redis;
 
 import faang.school.achievement.listener.ProjectCreateEventListener;
 import lombok.RequiredArgsConstructor;
