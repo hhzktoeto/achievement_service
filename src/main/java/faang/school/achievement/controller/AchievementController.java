@@ -7,8 +7,6 @@ import faang.school.achievement.dto.achievement.AchievementProgressDto;
 import faang.school.achievement.dto.achievement.UserAchievementDto;
 import faang.school.achievement.service.AchievementService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
