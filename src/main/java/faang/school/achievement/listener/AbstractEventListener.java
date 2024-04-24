@@ -5,24 +5,28 @@ import faang.school.achievement.service.event.EventHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.connection.Message;
-import org.springframework.stereotype.Component;
+import org.springframework.data.redis.connection.MessageListener;
+import org.springframework.data.redis.serializer.SerializationException;
 
 import java.io.IOException;
 import java.util.List;
 
 @Slf4j
-@Component
 @RequiredArgsConstructor
-public abstract class AbstractEventListener<T> {
-    protected final ObjectMapper objectMapper;
-    protected final List<EventHandler<T>> eventHandlers;
+public class AbstractEventListener<T> implements MessageListener {
+    private final ObjectMapper objectMapper;
+    private final List<EventHandler<T>> handlers;
+    private final Class<T> eventType;
 
-    protected T mapEvent(Message message, Class<T> eventType) {
+    @Override
+    public void onMessage(Message message, byte[] pattern) {
         try {
-            return objectMapper.readValue(message.getBody(), eventType);
+            log.info("Recieved and event: {}", message);
+            T event = objectMapper.readValue(message.getBody(), eventType);
+            handlers.forEach(handler -> handler.handle(event));
         } catch (IOException e) {
-            log.error("Error reading from message body: {}, Event type: {}", e.getMessage(), eventType.getName());
-            throw new RuntimeException(e);
+            log.error("IOException was thrown", e);
+            throw new SerializationException("Failed to deserialize message", e);
         }
     }
 }
