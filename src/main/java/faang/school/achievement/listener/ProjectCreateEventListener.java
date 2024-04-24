@@ -10,7 +10,7 @@ import java.util.List;
 @Component
 public class ProjectCreateEventListener extends AbstractEventListener<ProjectCreateEvent> {
 
-    public ProjectCreateEventListener(ObjectMapper objectMapper, List<EventHandler<ProjectCreateEvent>> eventHandlers, Class<ProjectCreateEvent> eventType) {
+    public ProjectCreateEventListener(ObjectMapper objectMapper, List<EventHandler<ProjectCreateEvent>> eventHandlers) {
         super(objectMapper, eventHandlers, ProjectCreateEvent.class);
     }
 }
