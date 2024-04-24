@@ -44,15 +44,15 @@ public class RedisConfig {
     }
 
     @Bean
-    MessageListenerAdapter messageListener() {
+    MessageListenerAdapter projectCreateListenerAdapter() {
         return new MessageListenerAdapter(projectCreateEventListener);
     }
 
     @Bean
-    RedisMessageListenerContainer redisContainer() {
+    RedisMessageListenerContainer projectCreateMessageListenerContainer() {
         final RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(redisConnectionFactory());
-        container.addMessageListener(messageListener(), projectCreateTopic());
+        container.addMessageListener(projectCreateListenerAdapter(), projectCreateTopic());
         return container;
     }
 
