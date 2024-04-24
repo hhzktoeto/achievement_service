@@ -14,6 +14,6 @@ public class BusinessmanAchievementHandler extends AbstractProjectCreateHandler 
                                      AchievementCache achievementCache,
                                      @Value("${achievement.businessman.name}")
                                      String bloggerAchievementTitle) {
-        super(achievementService, achievementCache, b);
+        super(achievementService, achievementCache, );
     }
 }
