@@ -1,5 +1,12 @@
 package faang.school.achievement.service;
 
+import faang.school.achievement.dto.achievement.AchievementDto;
+import faang.school.achievement.dto.achievement.AchievementFilterDto;
+import faang.school.achievement.dto.achievement.AchievementProgressDto;
+import faang.school.achievement.dto.achievement.UserAchievementDto;
+import faang.school.achievement.mapper.AchievementMapper;
+import faang.school.achievement.mapper.AchievementProgressMapper;
+import faang.school.achievement.mapper.UserAchievementMapper;
 import faang.school.achievement.model.Achievement;
 import faang.school.achievement.model.AchievementProgress;
 import faang.school.achievement.model.UserAchievement;
