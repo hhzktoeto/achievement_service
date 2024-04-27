@@ -14,6 +14,7 @@ import faang.school.achievement.repository.AchievementProgressRepository;
 import faang.school.achievement.repository.AchievementRepository;
 import faang.school.achievement.repository.UserAchievementRepository;
 import faang.school.achievement.service.filter.AchievementFilter;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,15 +26,19 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.anyLong;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class AchievementServiceTest {
+
     @Spy
     private AchievementMapperImpl achievementMapper;
     @Spy
@@ -46,8 +51,10 @@ class AchievementServiceTest {
     private List<AchievementFilter> achievementFilters;
     @Mock
     private UserAchievementRepository userAchievementRepository;
+
     @Mock
     private AchievementProgressRepository achievementProgressRepository;
+
     @InjectMocks
     private AchievementService achievementService;
     private Achievement achievement1;
@@ -81,6 +88,44 @@ class AchievementServiceTest {
         progress2 = AchievementProgress.builder()
                 .userId(2L)
                 .build();
+    }
+
+    @Test
+    void hasAchievement_ValidArgs() {
+        achievementService.hasAchievement(1L, 1L);
+
+        verify(userAchievementRepository, times(1)).existsByUserIdAndAchievementId(anyLong(), anyLong());
+    }
+
+    @Test
+    void createProgressIfNecessary_ValidArgs() {
+        achievementService.createProgressIfNecessary(1L, 1L);
+
+        verify(achievementProgressRepository, times(1)).createProgressIfNecessary(anyLong(), anyLong());
+    }
+
+    @Test
+    void getProgress_ValidArgs() {
+        when(achievementProgressRepository.findByUserIdAndAchievementId(anyLong(), anyLong())).thenReturn(Optional.of(new AchievementProgress()));
+
+        achievementService.getProgress(1L, 1L);
+
+        verify(achievementProgressRepository, times(1)).findByUserIdAndAchievementId(anyLong(), anyLong());
+    }
+
+    @Test
+    void getProgress_ProgressNotExist_ThrowsEntityNotFoundException() {
+        when(achievementProgressRepository.findByUserIdAndAchievementId(anyLong(), anyLong())).thenReturn(Optional.empty());
+
+        assertThrows(EntityNotFoundException.class, () -> achievementService.getProgress(1L, 1L));
+        verify(achievementProgressRepository, times(1)).findByUserIdAndAchievementId(anyLong(), anyLong());
+    }
+
+    @Test
+    void giveAchievement_ValidArgs() {
+        achievementService.giveAchievement(1L, new Achievement());
+
+        verify(userAchievementRepository, times(1)).save(any(UserAchievement.class));
     }
 
     @Test
@@ -146,5 +191,3 @@ class AchievementServiceTest {
         verify(achievementProgressRepository, times(1)).findByUserId(userId);
     }
 }
-
-

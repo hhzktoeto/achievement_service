@@ -26,6 +26,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class AchievementService {
+
     private final AchievementRepository achievementRepository;
     private final List<AchievementFilter> achievementFilters;
     private final AchievementMapper achievementMapper;
@@ -63,17 +64,17 @@ public class AchievementService {
     }
 
     @Transactional(readOnly = true)
-    public boolean hasAchievement(Long userId, Long achievementId) {
+    public boolean hasAchievement(long userId, long achievementId) {
         return userAchievementRepository.existsByUserIdAndAchievementId(userId, achievementId);
     }
 
     @Transactional
-    public void createProgressIfNecessary(Long userId, Long achievementId) {
+    public void createProgressIfNecessary(long userId, long achievementId) {
         achievementProgressRepository.createProgressIfNecessary(userId, achievementId);
     }
 
-    @Transactional
-    public AchievementProgress getProgress(Long userId, Long achievementId) {
+    @Transactional(readOnly = true)
+    public AchievementProgress getProgress(long userId, long achievementId) {
         return achievementProgressRepository.findByUserIdAndAchievementId(userId, achievementId)
                 .orElseThrow(() -> new EntityNotFoundException("Progress does not exist"));
     }
