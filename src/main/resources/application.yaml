@@ -24,6 +24,7 @@ spring:
       channel:
         achievement: achievement_channel
         follower: follower_channel
+        project-create-channel: project_create
     kafka:
       port: 9092
       host: localhost
@@ -38,6 +39,8 @@ achievements:
 
 thread-pool:
   size: 10
+
+
 
 server:
   port: 8085
