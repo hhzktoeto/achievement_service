@@ -17,7 +17,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @Slf4j
 @RequiredArgsConstructor
 @Configuration
-public class RedisConfig {
+public class RedisListenerConfig {
 
     private final ProjectCreateEventListener projectCreateEventListener;
 
@@ -29,18 +29,18 @@ public class RedisConfig {
     private String projectCreateChannel;
 
     @Bean
-    JedisConnectionFactory redisConnectionFactory() {
+    JedisConnectionFactory redisListenerConnectionFactory() {
         RedisStandaloneConfiguration configuration = new RedisStandaloneConfiguration(host, port);
         return new JedisConnectionFactory(configuration);
     }
 
     @Bean
-    RedisTemplate<String, Object> redisTemplate() {
-        final RedisTemplate<String, Object> template = new RedisTemplate<String, Object>();
-        template.setConnectionFactory(redisConnectionFactory());
-        template.setKeySerializer(new StringRedisSerializer());
-        template.setValueSerializer(new StringRedisSerializer());
-        return template;
+    RedisTemplate<String, Object> redisListenerTemplate() {
+        final RedisTemplate<String, Object> listenerTemplate = new RedisTemplate<String, Object>();
+        listenerTemplate.setConnectionFactory(redisListenerConnectionFactory());
+        listenerTemplate.setKeySerializer(new StringRedisSerializer());
+        listenerTemplate.setValueSerializer(new StringRedisSerializer());
+        return listenerTemplate;
     }
 
     @Bean
@@ -51,7 +51,7 @@ public class RedisConfig {
     @Bean
     RedisMessageListenerContainer projectCreateMessageListenerContainer() {
         final RedisMessageListenerContainer container = new RedisMessageListenerContainer();
-        container.setConnectionFactory(redisConnectionFactory());
+        container.setConnectionFactory(redisListenerConnectionFactory());
         container.addMessageListener(projectCreateListenerAdapter(), projectCreateTopic());
         return container;
     }

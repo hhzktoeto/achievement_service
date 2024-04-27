@@ -15,14 +15,14 @@ import java.util.List;
 public class CommentEventListener extends AbstractEventListener<CommentEvent> {
 
     public CommentEventListener(List<EventHandler<CommentEvent>> commentHandlers, ObjectMapper objectMapper) {
-        super(commentHandlers, objectMapper);
+        super(objectMapper, commentHandlers, CommentEvent.class);
     }
 
     @KafkaListener(topics = "${spring.data.kafka.channels.comment-channel.name}", groupId = "${spring.data.kafka.group-id}")
     public void listen(String event) {
         try {
             CommentEvent commentEvent = objectMapper.readValue(event, CommentEvent.class);
-            commentHandlers.forEach(handler -> handler.handle(commentEvent));
+            handlers.forEach(handler -> handler.handle(commentEvent));
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }

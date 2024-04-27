@@ -1,4 +1,4 @@
-package faang.school.achievement.config.context.redis;
+package faang.school.achievement.config.redis;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -32,17 +32,17 @@ public class RedisPublisherConfig {
     }
 
     @Bean
-    public JedisConnectionFactory redisConnectionFactory() {
+    public JedisConnectionFactory publisherRedisConnectionFactory() {
         RedisStandaloneConfiguration config = new RedisStandaloneConfiguration(host, port);
         return new JedisConnectionFactory(config);
     }
 
     @Bean
     public RedisTemplate<String, Object> redisTemplate() {
-        RedisTemplate<String, Object> template = new RedisTemplate<>();
-        template.setConnectionFactory(redisConnectionFactory());
-        template.setKeySerializer(new StringRedisSerializer());
-        template.setValueSerializer(new StringRedisSerializer());
-        return template;
+        RedisTemplate<String, Object> publisherTemplate = new RedisTemplate<>();
+        publisherTemplate.setConnectionFactory(publisherRedisConnectionFactory());
+        publisherTemplate.setKeySerializer(new StringRedisSerializer());
+        publisherTemplate.setValueSerializer(new StringRedisSerializer());
+        return publisherTemplate;
     }
 }
