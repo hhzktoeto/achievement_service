@@ -8,7 +8,6 @@ import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;
 import org.springframework.data.redis.serializer.SerializationException;
 
-import java.io.IOException;
 import java.util.List;
 
 @Slf4j
