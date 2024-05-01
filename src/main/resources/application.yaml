@@ -40,8 +40,6 @@ achievements:
 thread-pool:
   size: 10
 
-
-
 server:
   port: 8085
 
@@ -56,3 +54,5 @@ project-service:
 achievement:
   businessman:
     name: BUSINESSMAN
+  blogger:
+    name: BLOGGER
